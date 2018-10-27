@@ -1,0 +1,66 @@
+## D3.js Data-Driven-Documents ##
+
+Bibliothek, um im GUI performante und gut anpassbare Graphen zu generieren. 
+„With minimal overhead, D3 is extremely fast, supporting large datasets and dynamic behaviors for interaction and animation.” – d3js.org
+
+- Link: https://d3js.org/
+- License: BSD 3-Clause (privat und kommerziell frei nutzbar) https://github.com/d3/d3/blob/master/LICENSE
+
+
+## SuperWebSocket ##
+
+Bibliothek für WebSockets in C#
+
+- Link: https://github.com/kerryjiang/SuperWebSocket/
+- License: Apache-2.0
+
+
+## Grunt.js ##
+
+Build-Tool für Automation von Dev zu Production
+
+- Link: http://gruntjs.com/
+- License: MIT License
+
+
+## NPM ##
+
+Package-Manager für Javascript auf Basis von Node 
+
+- Link: https://www.npmjs.com/
+- License: The Artistic License 2.0
+
+
+## Grunt uglify ##
+
+Komprimiert und packt Dateien 
+
+- Link: https://github.com/gruntjs/grunt-contrib-uglify
+- License: MIT
+
+
+## Grunt watch ##
+
+Führt Grunt-Tasks aus wenn sich vorher konfigurierte Dateien verändern
+
+- Link: https://github.com/gruntjs/grunt-contrib-watch
+- License: MIT
+
+
+## Grunt Less ##
+
+LESS zu CSS compiler
+
+- Link: https://github.com/gruntjs/grunt-contrib-less
+- License: MIT
+
+
+__________________________________________________________________________________________________________________________________________________________
+
+
+Links:
+- Getting Started with Grunt https://gruntjs.com/getting-started
+- Tutorial SuperWebSocket https://www.youtube.com/watch?v=JbXurSfeceY
+- WebSockets example in JS: https://stackoverflow.com/questions/10200910/creating-a-hello-world-websocket-example#
+- D3.js Line Chart example: https://bost.ocks.org/mike/path/
+- .gitignore Generator: https://www.gitignore.io
