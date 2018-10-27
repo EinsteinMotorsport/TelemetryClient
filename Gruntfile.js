@@ -39,17 +39,17 @@ module.exports = function (grunt) {
         less: {
             development: {
                 files: {
-                    'dist/style.min.css': 'src/**/*.css'
+                    'dist/style.min.css': 'src/**/*.less'
                 }
             },
             production: {
                 files: {
-                    'dist/style.min.css': 'src/**/*.css'
+                    'dist/style.min.css': 'src/**/*.less'
                 }
             }
         },
         watch: {
-            files: ['src/**/*.js', 'src/**/*.css'],
+            files: ['src/**/*.js', 'src/**/*.less'],
             task: ['uglify:development', 'less:development'],
         }
     });
@@ -59,7 +59,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
 
     grunt.registerTask('js', ['uglify:development']);
-    grunt.registerTask('css', ['less:development']);
+    grunt.registerTask('less', ['less:development']);
     grunt.registerTask('production', ['uglify:production', 'less:production']);
     grunt.registerTask('default', ['uglify:development', 'less:development', 'watch']);
 };
