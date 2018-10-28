@@ -67,3 +67,5 @@ Links:
 - Material Style Guide: https://material.io/design/
 - Material Shadows: https://codepen.io/sdthornton/pen/wBZdXq
 - LESS: http://lesscss.org
+- Open Sans Font: https://www.fontsquirrel.com/fonts/open-sans
+
