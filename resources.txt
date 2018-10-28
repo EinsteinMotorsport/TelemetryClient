@@ -64,3 +64,6 @@ Links:
 - WebSockets example in JS: https://stackoverflow.com/questions/10200910/creating-a-hello-world-websocket-example#
 - D3.js Line Chart example: https://bost.ocks.org/mike/path/
 - .gitignore Generator: https://www.gitignore.io
+- Material Style Guide: https://material.io/design/
+- Material Shadows: https://codepen.io/sdthornton/pen/wBZdXq
+- LESS: http://lesscss.org
