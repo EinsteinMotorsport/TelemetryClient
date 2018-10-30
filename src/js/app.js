@@ -1,6 +1,6 @@
 app = {
     init: function () {
-        alert("Archieved");
+        //alert("Archieved");
     }
 }
 

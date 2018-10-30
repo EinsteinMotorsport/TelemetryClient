@@ -1,9 +1,15 @@
+// Color Palette
 @primaryColor: #424242; // Gray 800
 @primaryVariantColor: #616161; // Gray 700
 @secondaryColor: #FFEE58; // Yellow 400
 @secondaryVariantColor: #FDD835; // Yellow 600
 @fontColor: rgb(33, 33, 33);
 
+* {
+  box-sizing: border-box;
+}
+
+// Material Shadows
 .shadow-1 {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
   transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
@@ -27,4 +33,67 @@
 
 .shadow-5 {
   box-shadow: 0 19px 38px rgba(0, 0, 0, 0.30), 0 15px 12px rgba(0, 0, 0, 0.22);
+}
+
+h1, h2, h3, h4, h5, a {
+  line-height: 1.2;
+  margin: 0 0 8px;
+  font-family: "Open Sans", sans-serif;
+  font-weight: 400;
+}
+
+a {
+  text-decoration: none;
+  text-transform: uppercase;
+
+  color: @secondaryVariantColor;
+
+  &.primary {
+    color: @primaryColor;
+  }
+}
+
+// Material Card
+.card {
+
+  width: auto; // TODO: Felx-box
+  height: auto;
+  border-radius: 3px;
+  padding: 16px 20px 12px;
+
+  .shadow-1();
+
+  &:hover {
+    .shadow-2();
+  }
+
+  .thumbnail {
+
+  }
+
+  .header-text {
+    font-size: inherit;
+    color: #202124;
+    font-weight: 500;
+  }
+
+  .subhead {
+
+  }
+
+  .media {
+    margin: 0 0 16px;
+  }
+
+  .supporting-text {
+
+  }
+
+  .buttons {
+
+  }
+
+  .icons {
+
+  }
 }
