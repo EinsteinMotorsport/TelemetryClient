@@ -59,7 +59,6 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
 
     grunt.registerTask('js', ['uglify:development']);
-    grunt.registerTask('less', ['less:development']);
     grunt.registerTask('production', ['uglify:production', 'less:production']);
     grunt.registerTask('default', ['uglify:development', 'less:development', 'watch']);
 };
