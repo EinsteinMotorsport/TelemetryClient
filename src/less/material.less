@@ -5,6 +5,7 @@
 @secondaryVariantColor: #FDD835; // Yellow 600
 @fontColor: rgb(33, 33, 33);
 
+// Reset Browser Style
 * {
   box-sizing: border-box;
 }
@@ -40,6 +41,7 @@ html, body {
   box-shadow: 0 19px 38px rgba(0, 0, 0, 0.30), 0 15px 12px rgba(0, 0, 0, 0.22);
 }
 
+// Basic Text-Elements
 h1, h2, h3, h4, h5, a {
   line-height: 1.2;
   margin: 0 0 8px;
@@ -47,6 +49,7 @@ h1, h2, h3, h4, h5, a {
   font-weight: 400;
 }
 
+// Links
 a {
   text-decoration: none;
   text-transform: uppercase;
@@ -58,6 +61,7 @@ a {
   }
 }
 
+// Header-Bar
 .header {
   .shadow-2();
 
@@ -68,6 +72,25 @@ a {
 
   .thumbnail {
     height: 48px;
+  }
+}
+
+// Sticky Bottom Nav-Bar
+.navbar-bottom {
+
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  color: white;
+  background-color: @secondaryVariantColor;
+
+  ul {
+    list-style-type: none;
+
+    li {
+
+    }
   }
 }
 
