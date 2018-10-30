@@ -7,14 +7,6 @@ Bibliothek, um im GUI performante und gut anpassbare Graphen zu generieren.
 - License: BSD 3-Clause (privat und kommerziell frei nutzbar) https://github.com/d3/d3/blob/master/LICENSE
 
 
-## SuperWebSocket ##
-
-Bibliothek für WebSockets in C#
-
-- Link: https://github.com/kerryjiang/SuperWebSocket/
-- License: Apache-2.0
-
-
 ## Grunt.js ##
 
 Build-Tool für Automation von Dev zu Production
