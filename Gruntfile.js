@@ -50,7 +50,7 @@ module.exports = function (grunt) {
         },
         watch: {
             files: ['src/**/*.js', 'src/**/*.less'],
-            task: ['uglify:development', 'less:development'],
+            tasks: ['uglify:development', 'less:development'],
         }
     });
 
