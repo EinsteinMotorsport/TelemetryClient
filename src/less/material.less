@@ -41,9 +41,24 @@ html, body {
   box-shadow: 0 19px 38px rgba(0, 0, 0, 0.30), 0 15px 12px rgba(0, 0, 0, 0.22);
 }
 
+/* Ripple effect */
+.ripple {
+  background-position: center;
+  transition: background 0.4s;
+}
+.ripple:hover {
+  background: @secondaryColor radial-gradient(circle, transparent 1%, @secondaryColor 1%) center/15000%;
+}
+.ripple:active {
+  background-color: @primaryColor;
+  background-size: 100%;
+  transition: background 0s;
+}
+
+
 // Basic Text-Elements
 h1, h2, h3, h4, h5, a {
-  line-height: 1.2;
+  line-height: 20px;
   margin: 0 0 8px;
   font-family: "Open Sans", sans-serif;
   font-weight: 400;
@@ -52,8 +67,13 @@ h1, h2, h3, h4, h5, a {
 // Links
 a {
   text-decoration: none;
+  display: inline-block;
   text-transform: uppercase;
-
+  border: none;
+  padding: 12px 18px;
+  height: 48px;
+  font-size: 16px;
+  outline: none;
   color: @secondaryVariantColor;
 
   &.primary {
@@ -68,7 +88,7 @@ a {
   width: 100%;
   margin: 0 0 16px;
   padding: 16px 20px 12px;
-  background-color: @primaryColor;
+  background-color: @primaryVariantColor;
 
   .thumbnail {
     height: 48px;
@@ -85,7 +105,7 @@ a {
   color: white;
   background-color: @secondaryVariantColor;
   height: 48px;
-  padding: 12px 4px;
+  padding: 0;
 
   ul {
     list-style-type: none;
@@ -97,7 +117,7 @@ a {
       height: 24px;
       a {
         vertical-align: middle;
-        padding: 0 12px;
+        padding: 12px 12px;
       }
     }
   }
@@ -116,6 +136,10 @@ a {
 
   &:hover {
     .shadow-2();
+  }
+
+  &:last-child {
+    margin-bottom: 0;
   }
 
   .thumbnail {
