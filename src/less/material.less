@@ -46,15 +46,16 @@ html, body {
   background-position: center;
   transition: background 0.4s;
 }
+
 .ripple:hover {
   background: @secondaryColor radial-gradient(circle, transparent 1%, @secondaryColor 1%) center/15000%;
 }
+
 .ripple:active {
   background-color: @primaryColor;
   background-size: 100%;
   transition: background 0s;
 }
-
 
 // Basic Text-Elements
 h1, h2, h3, h4, h5, a {
@@ -123,52 +124,65 @@ a {
   }
 }
 
+// Page Content
+.content-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  padding: 0 4px;
+}
+
 // Material Card
 .card {
-
-  width: auto; // TODO: Flex-box
+  width: 50%;
   height: auto;
-  border-radius: 3px;
-  padding: 16px 20px 12px;
-  margin: 0 8px;
+  padding: 0 4px 8px;
 
-  .shadow-1();
-
-  &:hover {
-    .shadow-2();
+  &.card--half {
+    width: 25%
   }
 
-  &:last-child {
-    margin-bottom: 0;
-  }
+  .card-content {
+    width: auto;
+    height: auto;
+    border-radius: 3px;
+    padding: 16px 20px 12px;
 
-  .thumbnail {
+    .shadow-1();
 
-  }
+    &:hover {
+      .shadow-2();
+    }
 
-  .header-text {
-    font-size: inherit;
-    color: #202124;
-    font-weight: 500;
-  }
 
-  .subhead {
+    .thumbnail {
 
-  }
+    }
 
-  .media {
-    margin: 0 0 16px;
-  }
+    .header-text {
+      font-size: inherit;
+      color: #202124;
+      font-weight: 500;
+    }
 
-  .supporting-text {
+    .subhead {
 
-  }
+    }
 
-  .buttons {
+    .media {
+      margin: 0 0 16px;
+    }
 
-  }
+    .supporting-text {
 
-  .icons {
+    }
 
+    .buttons {
+
+    }
+
+    .icons {
+
+    }
   }
 }
