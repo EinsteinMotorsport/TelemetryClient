@@ -4,7 +4,6 @@
 
 <head>
     <link rel="stylesheet" type="text/css" href="dist/style.min.css"/>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.7.0/d3.min.js" type="text/javascript"></script>
     <script type="application/javascript" src="dist/app.min.js"></script>
 </head>
 
@@ -25,12 +24,12 @@
 <div class="navbar-bottom">
     <ul>
         <li>
-            <a class="primary ripple" href="#" onclick="connect()">
+            <a class="primary ripple start-socket" href="#">
                 Start
             </a>
         </li>
         <li>
-            <a class="primary ripple" href="#" onclick="disconnect()">
+            <a class="primary ripple stop-socket" href="#">
                 Stop
             </a>
         </li>
@@ -96,85 +95,7 @@
 </div>
 </body>
 <script>
-    var n = 30,
-        random = d3.randomNormal(0, 20),
-        data = d3.range(n).map(random);
-    var svg = d3.select("svg#ws-chart"),
-        margin = {
-            top: 20,
-            right: 20,
-            bottom: 20,
-            left: 40
-        },
-        width = document.getElementsByClassName('media')[0].clientWidth,
-        height = +svg.attr("height") - margin.top - margin.bottom,
-        g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-    var x = d3.scaleLinear()
-        .domain([0, n - 1])
-        .range([0, width]);
-    var y = d3.scaleLinear()
-        .domain([0, 70])
-        .range([height, 0]);
-    var line = d3.line()
-        .x(function (d, i) {
-            return x(i);
-        })
-        .y(function (d, i) {
-            return y(d);
-        });
-    g.append("defs").append("clipPath")
-        .attr("id", "clip")
-        .append("rect")
-        .attr("width", width)
-        .attr("height", height);
-    g.append("g")
-        .attr("class", "axis axis--x")
-        .attr("transform", "translate(0," + y(0) + ")")
-        .call(d3.axisBottom(x));
-    g.append("g")
-        .attr("class", "axis axis--y")
-        .call(d3.axisLeft(y).ticks(6));
-    g.append("g")
-        .attr("clip-path", "url(#clip)")
-        .append("path")
-        .datum(data)
-        .attr("class", "line")
-        .transition()
-        .duration(500)
-        .ease(d3.easeLinear);
 
-
-    let ws = null;
-
-    function connect() {
-        ws = new WebSocket("ws://localhost:7777/service");
-
-        ws.onopen = function () {
-            //("About to send data");
-            ws.send("Hello server");
-            //alert("Message sent!");
-        };
-
-        ws.onmessage = function (evt) {
-            //alert("About to receive data");
-            var received_msg = evt.data;
-
-            // Push a new data point onto the back.
-            data.push(received_msg);
-            // Redraw the line.
-            svg.select(".line").attr("d", line)
-                .attr("transform", null);
-            // Slide it to the left.
-            svg.select(".line").attr("transform", "translate(" + x(-1) + ",0)")
-                .transition();
-            // Pop the old data point off the front.
-            data.shift();
-        };
-        ws.onclose = function () {
-            // websocket is closed.
-            //alert("Connection is closed...");
-        };
-    }
 
     function disconnect() {
         if (ws != null) {
