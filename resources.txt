@@ -52,7 +52,6 @@ ________________________________________________________________________________
 
 Links:
 - Getting Started with Grunt https://gruntjs.com/getting-started
-- Tutorial SuperWebSocket https://www.youtube.com/watch?v=JbXurSfeceY
 - WebSockets example in JS: https://stackoverflow.com/questions/10200910/creating-a-hello-world-websocket-example#
 - D3.js Line Chart example: https://bost.ocks.org/mike/path/
 - .gitignore Generator: https://www.gitignore.io
@@ -61,3 +60,4 @@ Links:
 - LESS: http://lesscss.org
 - Open Sans Font: https://www.fontsquirrel.com/fonts/open-sans
 - Ripple-Effect: https://codepen.io/finnhvman/pen/jLXKJw
+- Material Icons: https://google.github.io/material-design-icons/
