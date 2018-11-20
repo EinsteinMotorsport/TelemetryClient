@@ -126,24 +126,24 @@ a {
 
 // Page Content
 .content-wrapper {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(2, 1fr);
   padding: 0 4px;
 }
 
 // Material Card
 .card {
-  width: 50%;
   height: auto;
   padding: 0 4px 8px;
+  grid-column: auto / span 2;
 
   &.card--full {
-    width: 100%;
+    grid-column: auto / span 4;
   }
 
   &.card--half {
-    width: 25%
+    grid-column: auto / span 1;
   }
 
   .card-content {
