@@ -11,7 +11,7 @@
   "devDependencies": {
     "grunt": "^1.0.3",
     "grunt-contrib-less": "^2.0.0",
-    "grunt-contrib-uglify": "^4.0.0",
+    "grunt-contrib-uglify-es": "^3.3.0",
     "grunt-contrib-watch": "^1.1.0"
   }
 }
