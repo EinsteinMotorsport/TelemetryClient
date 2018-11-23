@@ -116,6 +116,7 @@ a {
     li {
       display: inline-block;
       height: 24px;
+
       a {
         vertical-align: middle;
         padding: 12px 12px;
@@ -129,27 +130,38 @@ a {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-template-rows: repeat(2, 1fr);
-  padding: 0 4px;
+  grid-gap: 8px;
+  padding: 0 8px;
+  user-select: none;
 }
 
 // Material Card
 .card {
+  cursor: move;
   height: auto;
-  padding: 0 4px 8px;
-  grid-column: auto / span 2;
+  padding: 0;
+  grid-area: span 1/span 2;
+  grid-auto-flow: row dense;
+
+  transition: transform .2s ease-out;
+
+  * {
+    pointer-events: none;
+  }
 
   &.card--full {
-    grid-column: auto / span 4;
+    grid-area: span 1/span 4;
   }
 
   &.card--half {
-    grid-column: auto / span 1;
+    grid-area: span 1/span 1;
   }
 
   .card-content {
     width: auto;
     height: auto;
     border-radius: 3px;
+    border: 1px transparent solid;
     padding: 16px 20px 12px;
 
     .shadow-1();
@@ -157,7 +169,6 @@ a {
     &:hover {
       .shadow-2();
     }
-
 
     .thumbnail {
 
@@ -189,4 +200,13 @@ a {
 
     }
   }
+}
+
+.dragging {
+  opacity: .4;
+  transform: scale(.95);
+}
+
+.dragover .card-content {
+  border: 1px dashed grey;
 }

@@ -1,5 +1,5 @@
 (function () {
-    app = {
+    var app = {
 
         // Property for an Websocket Instance
         websocket: null,
@@ -14,11 +14,14 @@
 
             // Adds a line-chart with a given element to the speed-value
             this.chartDataHandler.chartMap.speed = new LineChart('svg#ws-chart');
+
+            // Starts draggable
+            draggable.init();
         },
 
         // Registers all events depending on this class
         registerEvents: function () {
-            var me = this;
+            let me = this;
 
             // Event-listener for elements starting a WebSocket connection
             document.getElementsByClassName('start-socket').on('click', me.onClickStartSocket);
@@ -29,7 +32,7 @@
 
         // Event-listener for elements starting a WebSocket connection
         onClickStartSocket: function (e) {
-            var me = this;
+            let me = this;
 
             // New connection to local running WebSocket Server
             me.websocket = new WebSocket("ws://localhost:7777/service");
@@ -68,7 +71,7 @@
 
 // Event handler for an Array of classes
 Object.prototype.on = function (event, callback) {
-    var me = this;
+    let me = this;
     Array.from(me).forEach(function (element) {
         element.addEventListener(event, callback);
     });
