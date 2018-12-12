@@ -76,7 +76,7 @@ function LineChart(element) {
         var me = this;
 
         // Push a new data point onto the back.
-        me.data.push(value);
+        me.data.push(value[0]);
 
         // Redraw the line.
         me.svg.select(".line").attr("d", me.line).attr("transform", null);
