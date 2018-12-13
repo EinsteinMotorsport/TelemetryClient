@@ -17,6 +17,9 @@
 
             // Starts draggable
             draggable.init();
+
+            // Init ChartConfiguration overlay
+            chartConfiguration.init();
         },
 
         // Registers all events depending on this class
@@ -73,6 +76,8 @@
 Object.prototype.on = function (event, callback) {
     let me = this;
     Array.from(me).forEach(function (element) {
-        element.addEventListener(event, callback);
+        element.addEventListener(event, function (e) {
+            callback(e)
+        });
     });
 };

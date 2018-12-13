@@ -137,16 +137,17 @@ a {
 
 // Material Card
 .card {
-  cursor: move;
   height: auto;
   padding: 0;
+  position: relative;
   grid-area: span 1/span 2;
   grid-auto-flow: row dense;
 
   transition: transform .2s ease-out;
 
-  * {
-    pointer-events: none;
+
+  &:hover {
+    cursor: move;
   }
 
   &.card--full {
@@ -202,6 +203,34 @@ a {
   }
 }
 
+.overlay--container {
+  display: none;
+  opacity: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  transition: opacity .4s ease-in-out;
+
+  &.overlay--visible {
+    display: block;
+    opacity: 1;
+  }
+
+  .overlay {
+    position: relative;
+    margin: 64px auto 0;
+    background-color: white;
+    height: auto;
+    width: 720px;
+    border: 1px transparent solid;
+    padding: 16px 20px 12px;
+  }
+}
+
 .dragging {
   opacity: .4;
   transform: scale(.95);
@@ -209,4 +238,12 @@ a {
 
 .dragover .card-content {
   border: 1px dashed grey;
+}
+
+.nav-icons {
+  position: absolute;
+  right: 0;
+  top: 0;
+  padding: 8px;
+  cursor: pointer;
 }
