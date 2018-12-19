@@ -1,76 +1,75 @@
-(function () {
-    var app = {
+var app = {
 
-        // Property for an Websocket Instance
-        websocket: null,
+    // Property for an Websocket Instance
+    websocket: null,
 
-        // Handles the data-flow to the chart
-        chartDataHandler: new DataHandler(),
+    // Handles the data-flow to the chart
+    chartDataHandler: new DataHandler(),
 
-        // Initialize Application
-        init: function () {
-            // register its elements
-            this.registerEvents();
+    // Initialize Application
+    init: function () {
+        // register its elements
+        this.registerEvents();
 
-            // Adds a line-chart with a given element to the speed-value
-            this.chartDataHandler.chartMap.speed = new LineChart('svg#ws-chart');
+        // Adds a line-chart with a given element to the speed-value
+        this.chartDataHandler.chartMap.speed = new LineChart('svg#ws-chart');
 
-            // Starts draggable
-            draggable.init();
+        // Starts draggable
+        draggable.init();
 
-            // Init ChartConfiguration overlay
-            chartConfiguration.init();
-        },
+        // Init ChartConfiguration overlay
+        chartConfiguration.init();
+    },
 
-        // Registers all events depending on this class
-        registerEvents: function () {
-            let me = this;
-
-            // Event-listener for elements starting a WebSocket connection
-            document.getElementsByClassName('start-socket').on('click', me.onClickStartSocket);
-
-            // Event-listener for elements stopping a WebSocket connection
-            document.getElementsByClassName('stop-socket').on('click', me.onClickStopSocket);
-        },
+    // Registers all events depending on this class
+    registerEvents: function () {
+        let me = this;
 
         // Event-listener for elements starting a WebSocket connection
-        onClickStartSocket: function (e) {
-            let me = this;
-
-            // New connection to local running WebSocket Server
-            me.websocket = new WebSocket("ws://localhost:7777/service");
-
-            // When connection is established
-            me.websocket.onopen = function () {
-                // Send test-data to the Server
-                me.websocket.send("Hello server");
-            };
-
-            // Event for handling data sent from the server
-            me.websocket.onmessage = function (evt) {
-                // Parse Data and give it to the charts
-                app.chartDataHandler.push(evt.data);
-            };
-
-            // Event fired when WebSocket connection is closed
-            me.websocket.onclose = function () {
-                // websocket is closed.
-            };
-        },
+        document.getElementsByClassName('start-socket').on('click', me.onClickStartSocket);
 
         // Event-listener for elements stopping a WebSocket connection
-        onClickStopSocket: function () {
-            if (this.websocket != null) {
-                this.websocket.close();
-            }
-        },
-    };
+        document.getElementsByClassName('stop-socket').on('click', me.onClickStopSocket);
+    },
 
-    // Start application when document is completely loaded
-    document.addEventListener("DOMContentLoaded", function () {
-        app.init();
-    });
-})();
+    // Event-listener for elements starting a WebSocket connection
+    onClickStartSocket: function (e) {
+        let me = this;
+
+        // New connection to local running WebSocket Server
+        me.websocket = new WebSocket("ws://localhost:7777/service");
+
+        // When connection is established
+        me.websocket.onopen = function () {
+            // Send test-data to the Server
+            me.websocket.send("Hello server");
+        };
+
+        // Event for handling data sent from the server
+        me.websocket.onmessage = function (evt) {
+            // Parse Data and give it to the charts
+            app.chartDataHandler.push(evt.data);
+        };
+
+        // Event fired when WebSocket connection is closed
+        me.websocket.onclose = function () {
+            // websocket is closed.
+        };
+    },
+
+    // Event-listener for elements stopping a WebSocket connection
+    onClickStopSocket: function () {
+        if (this.websocket != null) {
+            this.websocket.close();
+        }
+    },
+};
+
+// Start application when document is completely loaded
+document.addEventListener("DOMContentLoaded", function () {
+    app.init();
+});
+
 
 // Event handler for an Array of classes
 Object.prototype.on = function (event, callback) {
