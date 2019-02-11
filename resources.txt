@@ -61,3 +61,4 @@ Links:
 - Open Sans Font: https://www.fontsquirrel.com/fonts/open-sans
 - Ripple-Effect: https://codepen.io/finnhvman/pen/jLXKJw
 - Material Icons: https://google.github.io/material-design-icons/
+- Material Input: https://codepen.io/sevilayha/pen/IdGKH

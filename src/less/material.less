@@ -8,6 +8,7 @@
 // Reset Browser Style
 * {
   box-sizing: border-box;
+  font-family: "Open Sans", sans-serif;
 }
 
 html, body {
@@ -61,12 +62,11 @@ html, body {
 h1, h2, h3, h4, h5, a {
   line-height: 20px;
   margin: 0 0 8px;
-  font-family: "Open Sans", sans-serif;
   font-weight: 400;
 }
 
 // Links
-a {
+a, button {
   text-decoration: none;
   display: inline-block;
   text-transform: uppercase;
@@ -76,6 +76,7 @@ a {
   font-size: 16px;
   outline: none;
   color: @secondaryVariantColor;
+  cursor: pointer;
 
   &.primary {
     color: @primaryColor;
@@ -228,6 +229,10 @@ a {
     width: 720px;
     border: 1px transparent solid;
     padding: 16px 20px 12px;
+
+    .overlay--body form {
+      margin-top: 48px;
+    }
   }
 }
 
@@ -247,3 +252,147 @@ a {
   padding: 8px;
   cursor: pointer;
 }
+
+
+.input {
+  position: relative;
+  margin-bottom: 45px;
+
+  input, select {
+    font-size: 18px;
+    padding: 10px 10px 10px 5px;
+    display: block;
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid #757575;
+
+    &:focus {
+      outline: none;
+    }
+
+    &:focus ~ label {
+      top: -20px;
+      font-size: 14px;
+      color: @primaryColor;
+    }
+
+    &:focus ~ .highlight {
+      -webkit-animation: inputHighlighter 0.3s ease;
+      -moz-animation: inputHighlighter 0.3s ease;
+      animation: inputHighlighter 0.3s ease;
+    }
+
+    &:focus ~ .bar:before, &:focus ~ .bar:after {
+      width: 50%;
+    }
+  }
+
+  select {
+    appearance: none;
+    -webkit-appearance:none;
+    background-color: transparent;
+    margin-bottom: 1px;
+
+    &:focus ~ label, &:valid ~ label {
+      color: @primaryColor;
+      top: -20px;
+      transition: 0.2s ease all;
+      font-size: 14px;
+    }
+  }
+
+  &.select:after {
+    position: absolute;
+    top: 18px;
+    right: 10px;
+    width: 0;
+    height: 0;
+    padding: 0;
+    content: '';
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 6px solid rgba(0, 0, 0, 0.12);
+    pointer-events: none;
+  }
+
+  label {
+    color: #999;
+    font-size: 18px;
+    font-weight: normal;
+    position: absolute;
+    pointer-events: none;
+    left: 5px;
+    top: 10px;
+    transition: 0.2s ease all;
+    -moz-transition: 0.2s ease all;
+    -webkit-transition: 0.2s ease all;
+  }
+
+  .bar {
+    position: relative;
+    display: block;
+    width: 100%;
+
+    &:before, &:after {
+      content: '';
+      height: 2px;
+      width: 0;
+      bottom: 0;
+      position: absolute;
+      background: @primaryColor;
+      transition: 0.2s ease all;
+      -moz-transition: 0.2s ease all;
+      -webkit-transition: 0.2s ease all;
+    }
+
+    &:before {
+      left: 50%;
+    }
+
+    &:after {
+      right: 50%;
+    }
+  }
+
+  .highlight {
+    position: absolute;
+    height: 60%;
+    width: 100px;
+    top: 25%;
+    left: 0;
+    pointer-events: none;
+    opacity: 0.5;
+  }
+}
+
+
+@-webkit-keyframes inputHighlighter {
+  from {
+    background: @primaryColor;
+  }
+  to {
+    width: 0;
+    background: transparent;
+  }
+}
+
+@-moz-keyframes inputHighlighter {
+  from {
+    background: @primaryColor;
+  }
+  to {
+    width: 0;
+    background: transparent;
+  }
+}
+
+@keyframes inputHighlighter {
+  from {
+    background: @primaryColor;
+  }
+  to {
+    width: 0;
+    background: transparent;
+  }
+}
+
