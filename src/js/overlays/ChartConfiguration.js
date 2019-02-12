@@ -78,7 +78,7 @@ chartConfiguration = {
         app.chartDataHandler.chartMap[chartConfiguration.mediaType] = new LineChart(me.changingCard.querySelector('.media > svg'));
 
         // Change the data-attribute of the card to the selected media-type
-        e.target.closest('.card').dataset.mediaType = chartConfiguration.mediaType;
+        me.changingCard.dataset.mediaType = chartConfiguration.mediaType;
 
         // Hide the overlay
         me.onClickCloseOverlay();

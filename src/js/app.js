@@ -11,9 +11,6 @@ var app = {
         // register its elements
         this.registerEvents();
 
-        // Adds a line-chart with a given element to the speed-value
-        this.chartDataHandler.chartMap.speed = new LineChart('svg#ws-chart');
-
         // Starts draggable
         draggable.init();
 
