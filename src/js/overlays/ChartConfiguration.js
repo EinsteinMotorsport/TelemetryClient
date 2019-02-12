@@ -74,8 +74,17 @@ chartConfiguration = {
         me.changingCard.querySelector('.header-text').innerHTML =
             mediaTypeSelect.options[mediaTypeSelect.selectedIndex].text;
 
+
+        // Remove chart from the datahandler to prevent multiple links
+        app.chartDataHandler.chartMap[me.changingCard.dataset.mediaType].forEach((chart, key) => {
+            if (chart.element === me.changingCard.querySelector('.media > svg')) {
+                delete app.chartDataHandler.chartMap[me.changingCard.dataset.mediaType][key];
+            }
+        });
+
         // Update the datahandler and add the selected values to the graph
-        app.chartDataHandler.chartMap[chartConfiguration.mediaType] = new LineChart(me.changingCard.querySelector('.media > svg'));
+        app.chartDataHandler.chartMap[chartConfiguration.mediaType]
+            .push(new LineChart(me.changingCard.querySelector('.media > svg')));
 
         // Change the data-attribute of the card to the selected media-type
         me.changingCard.dataset.mediaType = chartConfiguration.mediaType;

@@ -2,9 +2,9 @@ function DataHandler() {
 
     // Mapping to know which chart shows which data
     this.chartMap = {
-        'speed': null,
-        'acceleration': null,
-        'oilPressure': null,
+        'speed': [],
+        'acceleration': [],
+        'oilPressure': [],
     };
 
     // Data pushed to handle
@@ -21,7 +21,12 @@ function DataHandler() {
             2 : "oilPressure",
         };
 
-        // Push the sended value to the chart
-        me.chartMap[mappedData[data[0]]].push(data[1]);
+        // Push the sended value to the charts
+        let charts = me.chartMap[mappedData[data[0]]];
+        if (Array.isArray(charts)) {
+            charts.forEach((chart) => {
+                chart.push(data[1]);
+            });
+        }
     };
 }
