@@ -77,3 +77,11 @@ Object.prototype.on = function (event, callback) {
         });
     });
 };
+
+
+
+// DATA_TYPE CONSTANTS
+const DATE_TYPE_SPEED = "speed";
+const DATE_TYPE_ACCELERATION = "acceleration";
+const DATE_TYPE_OIL_PRESSURE = "oil-pressure";
+const DATE_TYPE_SHIFT = "shift";
