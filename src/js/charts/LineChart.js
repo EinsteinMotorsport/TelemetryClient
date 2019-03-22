@@ -3,6 +3,9 @@ function LineChart(element) {
     // Svg Element in the document
     this.element = element;
 
+    // Mapping the datatypes to the chart
+    this.chartMap = [];
+
     // Chart properties
     this.svg = null;
     this.data = null;

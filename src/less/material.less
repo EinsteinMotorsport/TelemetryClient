@@ -229,10 +229,6 @@ a, button {
     width: 720px;
     border: 1px transparent solid;
     padding: 16px 20px 12px;
-
-    .overlay--body form {
-      margin-top: 48px;
-    }
   }
 }
 
@@ -264,7 +260,7 @@ a, button {
 
 .input {
   position: relative;
-  margin-bottom: 45px;
+  margin-bottom: 8px;
 
   input, select {
     font-size: 18px;
@@ -300,6 +296,7 @@ a, button {
     -webkit-appearance:none;
     background-color: transparent;
     margin-bottom: 1px;
+    margin-top: 48px;
 
     &:focus ~ label, &:valid ~ label {
       color: @primaryColor;
@@ -373,6 +370,30 @@ a, button {
   }
 }
 
+ul.list {
+  margin: 0;
+  padding: 4px;
+  list-style-type: none;
+
+  li {
+    max-width: 250px;
+    position: relative;
+    padding: 4px;
+
+    &:hover {
+      background-color: #ddd;
+    }
+
+    .data-type--delete {
+      position: absolute;
+      right: 0;
+    }
+  }
+}
+
+.data-type--delete {
+  cursor: pointer;
+}
 
 @-webkit-keyframes inputHighlighter {
   from {

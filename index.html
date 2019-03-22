@@ -37,7 +37,7 @@
     </ul>
 </div>
 <div class="content-wrapper">
-    <div class="card" data-media-type="acceleration">
+    <div class="card" data-chart-id="0">
         <div class="card-content">
             <h2 class="header-text">
                 Beschleunigung
@@ -53,7 +53,7 @@
             </div>
         </div>
     </div>
-    <div class="card" data-media-type="speed">
+    <div class="card" data-chart-id="1">
         <div class="card-content">
             <h2 class="header-text">
                 Geschwindigkeit
@@ -69,7 +69,7 @@
             </div>
         </div>
     </div>
-    <div class="card" data-media-type="oilPressure">
+    <div class="card" data-chart-id="2">
         <div class="card-content">
             <h2 class="header-text">
                 Öldruck
@@ -85,7 +85,7 @@
             </div>
         </div>
     </div>
-    <div class="card card--half" data-media-type="shift">
+    <div class="card card--half" data-chart-id="3">
         <div class="card-content">
             <h2 class="header-text">
                 Gang
@@ -101,7 +101,7 @@
             </div>
         </div>
     </div>
-    <div class="card card--half" data-media-type="">
+    <div class="card card--half" data-chart-id="4">
         <div class="card-content">
             <h2 class="header-text">
                 Tacho
@@ -132,24 +132,48 @@
         </div>
         <div class="overlay--body">
             <form>
-                <div class="input select">
-                    <select id="chart-configuration-media-type">
-                        <option value="speed">Geschwindigkeit</option>
-                        <option value="acceleration">Beschleunigung</option>
-                        <option value="shift">Gang</option>
-                        <option value="oilPressure">Öl-Druck</option>
-                    </select>
-                    <span class="highlight"></span>
-                    <span class="bar"></span>
-                    <label>Datensatz</label>
+
+                <div class="form-group">
+                    <ul class="list list--data-types deleteable">
+
+                    </ul>
+                    <div class="input select">
+                        <select id="chart-configuration-data-type">
+                            <option value="speed">Geschwindigkeit</option>
+                            <option value="acceleration">Beschleunigung</option>
+                            <option value="shift">Gang</option>
+                            <option value="oilPressure">Öl-Druck</option>
+                        </select>
+                        <span class="highlight"></span>
+                        <span class="bar"></span>
+                        <label>Datensatz</label>
+                    </div>
+                    <button class="primary" type="button" id="chart-value-add">
+                        Add
+                    </button>
+                </div>
+
+                <br>
+
+                <div class="form-group">
+                    <div class="input select">
+                        <select id="chart-configuration-chart-type">
+                            <option value="line-chart">Linien-Diagram</option>
+                        </select>
+                        <span class="highlight"></span>
+                        <span class="bar"></span>
+                        <label>Diagramm-Typ</label>
+                    </div>
                 </div>
 
                 <!-- Design sample -->
-                <div class="input">
-                    <input type="text">
-                    <span class="highlight"></span>
-                    <span class="bar"></span>
-                    <label>Warnung ab</label>
+                <div class="form-group">
+                    <div class="input">
+                        <input type="text">
+                        <span class="highlight"></span>
+                        <span class="bar"></span>
+                        <label>Warnung ab</label>
+                    </div>
                 </div>
 
                 <button type="submit" class="primary ripple chart-configuration-save">

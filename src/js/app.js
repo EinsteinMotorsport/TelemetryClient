@@ -1,4 +1,4 @@
-var app = {
+let app = {
 
     // Property for an Websocket Instance
     websocket: null,
@@ -71,11 +71,30 @@ document.addEventListener("DOMContentLoaded", function () {
 // Event handler for an Array of classes
 Object.prototype.on = function (event, callback) {
     let me = this;
-    Array.from(me).forEach(function (element) {
-        element.addEventListener(event, function (e) {
+
+    // If multiple elements => loop
+    if (NodeList.prototype.isPrototypeOf(me) || HTMLCollection.prototype.isPrototypeOf(me)) {
+
+        // Add EventListener for each element
+        Array.from(me).forEach(function (element) {
+            element.addEventListener(event, function (e) {
+                callback(e)
+            });
+        });
+
+    } else {
+
+        // Add EventListener for single element
+        me.addEventListener(event, function (e) {
             callback(e)
         });
-    });
+
+    }
+};
+
+// First char uppercase
+String.prototype.capitalize = function() {
+    return this.charAt(0).toUpperCase() + this.slice(1)
 };
 
 

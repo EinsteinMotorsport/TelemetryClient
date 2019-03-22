@@ -1,6 +1,6 @@
-chartConfiguration = {
+var chartConfiguration = {
 
-    mediaType: null,
+    chartId: null,
 
     changingCard: null,
 
@@ -31,6 +31,51 @@ chartConfiguration = {
         document.getElementsByClassName("chart-configuration-save").on('click', function (e) {
             me.onClickChartConfigurationSave(e);
         });
+
+        // On click add chart value to chart
+        document.getElementById("chart-value-add").on('click', function (e) {
+            me.onClickChartValueAdd(e);
+        });
+
+        // On click remove chart value from chart
+        document.getElementsByClassName("list--data-types").on('click', function (e) {
+            if (e.target.classList.contains('data-type--delete')) {
+                me.onClickChartValueRemove(e);
+            }
+        });
+    },
+
+    onClickChartValueAdd: function (e) {
+        e.preventDefault();
+        let me = this;
+
+        // Select dropdown for data-types
+        let dataTypeSelect = document.getElementById("chart-configuration-data-type");
+
+        // Append a new data type to chartmap
+        app.chartDataHandler.charts[me.chartId].chartMap.push(dataTypeSelect.value);
+
+        // Add the datatype to the list (id, label) e.g. (speed, Geschwindigkeit)
+        this.addDataTypeToList(
+            dataTypeSelect.options[dataTypeSelect.selectedIndex].value,
+            dataTypeSelect.options[dataTypeSelect.selectedIndex].innerHTML
+        );
+    },
+
+    onClickChartValueRemove: function (e) {
+        let me = this;
+        // Data-type Id of the clicked element
+        let dataTypeId = e.target.dataset.id;
+
+        // Delete the element from the datahandler
+        for (let i = 0; i < app.chartDataHandler.charts[me.chartId].chartMap.length; i++) {
+            if (app.chartDataHandler.charts[me.chartId].chartMap[i] === dataTypeId) {
+                app.chartDataHandler.charts[me.chartId].chartMap.splice(i, 1);
+            }
+        }
+
+        // Remove the element from the DOM
+        this.removeDataTypeFromList(dataTypeId);
     },
 
     onClickOpenOverlay: function (e) {
@@ -39,11 +84,11 @@ chartConfiguration = {
         // Save the card which is currently edited to the object
         me.changingCard = e.target.closest('.card');
 
-        // The media-type of the chart from da cards data-attributes
-        chartConfiguration.mediaType = me.changingCard.dataset.mediaType;
+        // Get the id of the chart
+        me.chartId = me.changingCard.dataset.chartId;
 
-        // Preselect current selection in the dropdown
-        document.getElementById("chart-configuration-media-type").value = chartConfiguration.mediaType;
+        // Load the configuration out of the chart map in the data handler
+        this.load();
 
         // Show the overlay
         document.querySelector("[data-overlay='configure']").classList.add("overlay--visible");
@@ -52,6 +97,9 @@ chartConfiguration = {
     onClickCloseOverlay: function (e) {
         // Hide the overlay
         document.querySelector("[data-overlay='configure']").classList.remove("overlay--visible");
+
+        // clear the node list of data types
+        this.clearList();
     },
 
     onClickOverlayContainer: function (e) {
@@ -64,32 +112,58 @@ chartConfiguration = {
         e.preventDefault();
         let me = this;
 
-        // Store the dropdown element into a variable
-        let mediaTypeSelect = document.getElementById("chart-configuration-media-type");
+        // Charttypes select
+        let chartTypeSelect = document.getElementById("chart-configuration-chart-type");
 
-        // Get the selected value from the dropdown
-        chartConfiguration.mediaType = mediaTypeSelect.value;
-
-        // Set the headline of the card to the text of the selected option
-        me.changingCard.querySelector('.header-text').innerHTML =
-            mediaTypeSelect.options[mediaTypeSelect.selectedIndex].text;
-
-
-        // Remove chart from the datahandler to prevent multiple links
-        app.chartDataHandler.chartMap[me.changingCard.dataset.mediaType].forEach((chart, key) => {
-            if (chart.element === me.changingCard.querySelector('.media > svg')) {
-                delete app.chartDataHandler.chartMap[me.changingCard.dataset.mediaType][key];
-            }
-        });
-
-        // Update the datahandler and add the selected values to the graph
-        app.chartDataHandler.chartMap[chartConfiguration.mediaType]
-            .push(new LineChart(me.changingCard.querySelector('.media > svg')));
-
-        // Change the data-attribute of the card to the selected media-type
-        me.changingCard.dataset.mediaType = chartConfiguration.mediaType;
+        // Set charttype
+        switch (chartTypeSelect.value) {
+            case "linechart":
+            default:
+                // Set Chart to linechart
+                app.chartDataHandler.charts[me.chartId] = new LineChart(me.changingCard.querySelector('.media > svg'));
+        }
 
         // Hide the overlay
         me.onClickCloseOverlay();
     },
+
+    // Add a data type to the list in the overlay
+    addDataTypeToList: function (id, label) {
+        document.getElementsByClassName('list--data-types')[0].innerHTML +=
+            `<li>${label}<i data-id="${id}" class="material-icons data-type--delete">close</i></li>`;
+    },
+
+    // Removes a data type from the list in the overlay
+    removeDataTypeFromList: function (id) {
+        document.querySelector(`[data-id="${id}"]`).parentNode.remove();
+    },
+
+    // Removes all elements in the list in the overlay (clearing on close)
+    clearList: function () {
+        document.querySelector('.list--data-types').innerHTML = '';
+    },
+
+    // Load chart configuration out of the datahandler
+    load: function () {
+        console.log("All charts", app.chartDataHandler.charts);
+        console.log("Chart config", app.chartDataHandler.charts[this.chartId]);
+
+        // If chart config exists
+        if (app.chartDataHandler.charts[this.chartId]) {
+
+            // ChartMap contains all data types displayed in the chart
+            let chartMap = app.chartDataHandler.charts[this.chartId].chartMap || [];
+
+            // If data types are set, loop through them and display them in the list of added data types
+            if (chartMap.length !== 0) {
+                for (let i = 0; i < chartMap.length; i++) {
+                    // TODO: Translation
+                    this.addDataTypeToList(chartMap[i], chartMap[i].capitalize())
+                }
+            }
+
+            // TODO: Chart type
+
+        }
+    }
 };

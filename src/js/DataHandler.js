@@ -1,11 +1,7 @@
 function DataHandler() {
 
-    // Mapping to know which chart shows which data
-    this.chartMap = {
-        'speed': [],
-        'acceleration': [],
-        'oilPressure': [],
-    };
+    // Contains all charts ordered by chartId
+    this.charts = [];
 
     // Data pushed to handle
     this.push = function (json) {
@@ -21,12 +17,18 @@ function DataHandler() {
             2 : "oilPressure",
         };
 
-        // Push the sended value to the charts
-        let charts = me.chartMap[mappedData[data[0]]];
-        if (Array.isArray(charts)) {
-            charts.forEach((chart) => {
-                chart.push(data[1]);
-            });
+        console.log(data);
+
+        console.log(me.charts);
+
+        // Loop through all charts and look for the data type in the map
+        for (let i = 0; i < me.charts.length; i++) {
+            for (let j = 0; j < me.charts[i].chartMap.length; j++) {
+                // If the data type is defined for the chart, push the received value to it
+                if (mappedData[data[0]] === me.charts[i].chartMap[j]) {
+                    me.charts[i].push(data[1]);
+                }
+            }
         }
     };
 }
