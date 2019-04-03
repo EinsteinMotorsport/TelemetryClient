@@ -1,15 +1,22 @@
-var chartConfiguration = {
+let chartConfiguration = {
 
     chartId: null,
 
     changingCard: null,
 
-    init: function () {
-        let me = this;
 
-        me.registerEvents();
+    /**
+     * Init the object
+     */
+    init: function () {
+        // Register the eventhandler
+        this.registerEvents();
     },
 
+
+    /**
+     * Register the objects events
+     */
     registerEvents: function () {
         let me = this;
 
@@ -45,6 +52,12 @@ var chartConfiguration = {
         });
     },
 
+
+    /**
+     * Adds the in the dropdown selected data type to the chart datahandler and the list
+     *
+     * @param e event
+     */
     onClickChartValueAdd: function (e) {
         e.preventDefault();
         let me = this;
@@ -52,25 +65,40 @@ var chartConfiguration = {
         // Select dropdown for data-types
         let dataTypeSelect = document.getElementById("chart-configuration-data-type");
 
+        // Changing chart
+        let chart = app.chartDataHandler.charts[me.chartId];
+
         // Append a new data type to chartmap
-        app.chartDataHandler.charts[me.chartId].chartMap.push(dataTypeSelect.value);
+        chart.chartMap.push(dataTypeSelect.value);
+
+        // Selected element from the data-type dropdown
+        let selectedElement = dataTypeSelect.options[dataTypeSelect.selectedIndex];
 
         // Add the datatype to the list (id, label) e.g. (speed, Geschwindigkeit)
-        this.addDataTypeToList(
-            dataTypeSelect.options[dataTypeSelect.selectedIndex].value,
-            dataTypeSelect.options[dataTypeSelect.selectedIndex].innerHTML
-        );
+        this.addDataTypeToList(selectedElement.value, selectedElement.innerHTML);
+
+        // Add the data-type to the chart
+        chart.addDataType(dataTypes[selectedElement.value].id);
     },
 
+
+    /**
+     * Removes a value from the list of displayed data type if the delete icon was clicked
+     *
+     * @param e event
+     */
     onClickChartValueRemove: function (e) {
         let me = this;
         // Data-type Id of the clicked element
         let dataTypeId = e.target.dataset.id;
 
+        // Changing chart
+        let chart = app.chartDataHandler.charts[me.chartId];
+
         // Delete the element from the datahandler
-        for (let i = 0; i < app.chartDataHandler.charts[me.chartId].chartMap.length; i++) {
-            if (app.chartDataHandler.charts[me.chartId].chartMap[i] === dataTypeId) {
-                app.chartDataHandler.charts[me.chartId].chartMap.splice(i, 1);
+        for (let i = 0; i < chart.chartMap.length; i++) {
+            if (chart.chartMap[i] === dataTypeId) {
+                chart.chartMap.splice(i, 1);
             }
         }
 
@@ -78,6 +106,12 @@ var chartConfiguration = {
         this.removeDataTypeFromList(dataTypeId);
     },
 
+
+    /**
+     * Open the overlay and trigger the load method the display the configuration of the chart
+     *
+     * @param e event
+     */
     onClickOpenOverlay: function (e) {
         let me = this;
 
@@ -94,6 +128,12 @@ var chartConfiguration = {
         document.querySelector("[data-overlay='configure']").classList.add("overlay--visible");
     },
 
+
+    /**
+     * Close the overlay if the close button was clicked
+     *
+     * @param e event
+     */
     onClickCloseOverlay: function (e) {
         // Hide the overlay
         document.querySelector("[data-overlay='configure']").classList.remove("overlay--visible");
@@ -102,20 +142,32 @@ var chartConfiguration = {
         this.clearList();
     },
 
+
+    /**
+     * Close the overlay if the darkened background was clicked
+     *
+     * @param e event
+     */
     onClickOverlayContainer: function (e) {
         // check if clicked element is outside the overlay -> close on click in the darkened area
         if (e.srcElement.classList.contains("overlay--container"))
             this.onClickCloseOverlay(e);
     },
 
+
+    /**
+     * Save the chart type if the save button was clicked
+     *
+     * @param e event
+     */
     onClickChartConfigurationSave: function (e) {
         e.preventDefault();
         let me = this;
 
-        // Charttypes select
+        // Chart-types select
         let chartTypeSelect = document.getElementById("chart-configuration-chart-type");
 
-        // Set charttype
+        // Set chart-type
         switch (chartTypeSelect.value) {
             case "linechart":
             default:
@@ -127,27 +179,41 @@ var chartConfiguration = {
         me.onClickCloseOverlay();
     },
 
-    // Add a data type to the list in the overlay
+
+    /**
+     * Add a data type to the list in the overlay
+     *
+     * @param id int
+     * @param label string
+     */
     addDataTypeToList: function (id, label) {
         document.getElementsByClassName('list--data-types')[0].innerHTML +=
             `<li>${label}<i data-id="${id}" class="material-icons data-type--delete">close</i></li>`;
     },
 
-    // Removes a data type from the list in the overlay
+
+    /**
+     * Removes a data type from the list in the overlay
+     *
+     * @param id int
+     */
     removeDataTypeFromList: function (id) {
         document.querySelector(`[data-id="${id}"]`).parentNode.remove();
     },
 
-    // Removes all elements in the list in the overlay (clearing on close)
+
+    /**
+     * Removes all elements in the list in the overlay (clearing on close)
+     */
     clearList: function () {
         document.querySelector('.list--data-types').innerHTML = '';
     },
 
-    // Load chart configuration out of the datahandler
-    load: function () {
-        console.log("All charts", app.chartDataHandler.charts);
-        console.log("Chart config", app.chartDataHandler.charts[this.chartId]);
 
+    /**
+     * Load chart configuration out of the datahandler
+     */
+    load: function () {
         // If chart config exists
         if (app.chartDataHandler.charts[this.chartId]) {
 
@@ -157,8 +223,7 @@ var chartConfiguration = {
             // If data types are set, loop through them and display them in the list of added data types
             if (chartMap.length !== 0) {
                 for (let i = 0; i < chartMap.length; i++) {
-                    // TODO: Translation
-                    this.addDataTypeToList(chartMap[i], chartMap[i].capitalize())
+                    this.addDataTypeToList(chartMap[i], dataTypes[chartMap[i]].translation);
                 }
             }
 

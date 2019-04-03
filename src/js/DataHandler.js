@@ -1,6 +1,10 @@
 function DataHandler() {
 
-    // Contains all charts ordered by chartId
+    /**
+     * Contains all charts ordered by chartId
+     *
+     * @type {ChartInterface[]}
+     */
     this.charts = [];
 
     // Data pushed to handle
@@ -10,25 +14,25 @@ function DataHandler() {
         // Parsed Json from the server
         let data = JSON.parse(json);
 
-        // Maps the response to the different identities
-        let mappedData = {
-            0 : "speed",
-            1 : "acceleration",
-            2 : "oilPressure",
-        };
+        // Maps the response (data-type id) to the different identities
+        let dataMap = {};
+        Object.getOwnPropertyNames(dataTypes).forEach(key => {
+            dataMap[dataTypes[key].id] = key;
+        });
 
-        console.log(data);
-
-        console.log(me.charts);
 
         // Loop through all charts and look for the data type in the map
         for (let i = 0; i < me.charts.length; i++) {
             for (let j = 0; j < me.charts[i].chartMap.length; j++) {
                 // If the data type is defined for the chart, push the received value to it
-                if (mappedData[data[0]] === me.charts[i].chartMap[j]) {
-                    me.charts[i].push(data[1]);
+                if (dataMap[data[0]] === me.charts[i].chartMap[j]) {
+                    console.log("chart", me.charts[i]);
+                    console.log("data-type", me.charts[i].chartMap[j]);
+                    console.log("matched data-type-id", dataTypes[me.charts[i].chartMap[j]].id);
+                    me.charts[i].push(dataTypes[me.charts[i].chartMap[j]].id, data[1]);
                 }
             }
         }
+
     };
 }

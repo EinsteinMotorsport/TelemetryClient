@@ -14,6 +14,9 @@ let app = {
         // Starts draggable
         draggable.init();
 
+        // Initialize the chart loaded by default
+        this.initCharts();
+
         // Init ChartConfiguration overlay
         chartConfiguration.init();
     },
@@ -27,6 +30,18 @@ let app = {
 
         // Event-listener for elements stopping a WebSocket connection
         document.getElementsByClassName('stop-socket').on('click', me.onClickStopSocket);
+    },
+
+
+    /**
+     * Initialize the chart loaded by default
+     *
+     * Sets the chart object for each card.
+     */
+    initCharts: function () {
+        document.querySelectorAll("[data-chart-id]").forEach((value, key) => {
+            app.chartDataHandler.charts[key] = new LineChart(value.querySelector('.media > svg'));
+        });
     },
 
     // Event-listener for elements starting a WebSocket connection
@@ -97,10 +112,17 @@ String.prototype.capitalize = function() {
     return this.charAt(0).toUpperCase() + this.slice(1)
 };
 
-
-
-// DATA_TYPE CONSTANTS
-const DATE_TYPE_SPEED = "speed";
-const DATE_TYPE_ACCELERATION = "acceleration";
-const DATE_TYPE_OIL_PRESSURE = "oil-pressure";
-const DATE_TYPE_SHIFT = "shift";
+/**
+ * Randomize array element order in-place.
+ * Using Durstenfeld shuffle algorithm.
+ *
+ * https://stackoverflow.com/a/12646864
+ */
+Array.prototype.shuffle = function () {
+    for (let i = this.length - 1; i > 0; i--) {
+        let j = Math.floor(Math.random() * (i + 1));
+        let temp = this[i];
+        this[i] = this[j];
+        this[j] = temp;
+    }
+};
