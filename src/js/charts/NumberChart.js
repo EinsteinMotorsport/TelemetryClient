@@ -9,7 +9,7 @@ function NumberChart(element) {
     // Svg Element in the document
     this.element = element;
 
-    // Mapping the datatypes to the chart
+    // Mapping the data-types to the chart
     this.chartMap = [];
 
     // Chart svg
@@ -93,7 +93,6 @@ function NumberChart(element) {
 
         // Update the shown value
         me.valueContainer.text(value);
-
     };
 
 

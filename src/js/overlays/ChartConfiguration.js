@@ -35,8 +35,8 @@ let chartConfiguration = {
         });
 
         // On click the save button
-        document.getElementsByClassName("chart-configuration-save").on('click', function (e) {
-            me.onClickChartConfigurationSave(e);
+        document.getElementById("chart-configuration-chart-type").on('change', function (e) {
+            me.onChangeChartType(e);
         });
 
         // On click add chart value to chart
@@ -118,8 +118,9 @@ let chartConfiguration = {
         // Save the card which is currently edited to the object
         me.changingCard = e.target.closest('.card');
 
-        // Get the id of the chart
+        // Get the id and type of the chart
         me.chartId = me.changingCard.dataset.chartId;
+        me.chartType = me.changingCard.dataset.chartType;
 
         // Load the configuration out of the chart map in the data handler
         this.load();
@@ -150,17 +151,17 @@ let chartConfiguration = {
      */
     onClickOverlayContainer: function (e) {
         // check if clicked element is outside the overlay -> close on click in the darkened area
-        if (e.srcElement.classList.contains("overlay--container"))
+        if (e["srcElement"].classList.contains("overlay--container"))
             this.onClickCloseOverlay(e);
     },
 
 
     /**
-     * Save the chart type if the save button was clicked
+     * Save the chart type if the select dropdown changed
      *
      * @param e event
      */
-    onClickChartConfigurationSave: function (e) {
+    onChangeChartType: function (e) {
         e.preventDefault();
         let me = this;
 
@@ -182,9 +183,6 @@ let chartConfiguration = {
                 // Set Chart to line-chart
                 app.chartDataHandler.charts[me.chartId] = new LineChart(me.changingCard.querySelector('.media > svg'));
         }
-
-        // Hide the overlay
-        me.onClickCloseOverlay();
     },
 
 
@@ -219,7 +217,20 @@ let chartConfiguration = {
 
 
     /**
-     * Load chart configuration out of the datahandler
+     * Select the chart type in the dropdown
+     */
+    selectChartType: function (chartType) {
+        let options = document.getElementById("chart-configuration-chart-type").options;
+        Array.prototype.forEach.call(options, (element) => {
+            if (element.value === chartType) {
+                element.selected = true;
+            }
+        });
+    },
+
+
+    /**
+     * Load chart configuration out of the data-handler
      */
     load: function () {
         // If chart config exists
@@ -235,8 +246,8 @@ let chartConfiguration = {
                 }
             }
 
-            // TODO: Chart type
-
+            // Preselect the chart type
+            this.selectChartType(this.chartType);
         }
     }
 };

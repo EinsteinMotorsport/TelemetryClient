@@ -9,7 +9,7 @@ function LineChart(element) {
     // Svg Element in the document
     this.element = element;
 
-    // Mapping the datatypes to the chart
+    // Mapping the data-types to the chart
     this.chartMap = [];
 
     // Chart svg

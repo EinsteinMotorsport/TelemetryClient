@@ -39,10 +39,23 @@ let app = {
      * Sets the chart object for each card.
      */
     initCharts: function () {
+        // Select each chart element and loop through all of them
         document.querySelectorAll("[data-chart-id]").forEach((value, key) => {
-            app.chartDataHandler.charts[key] = new LineChart(value.querySelector('.media > svg'));
+            // Get the chart type from the data-attribute and decide which chart object is needed
+            switch (value.getAttribute("data-chart-type")) {
+                case "number-chart":
+                    app.chartDataHandler.charts[key] = new NumberChart(value.querySelector('.media > svg'));
+                    break;
+                case "gauge-chart":
+                    app.chartDataHandler.charts[key] = new GaugeChart(value.querySelector('.media > svg'));
+                    break;
+                case "line-chart":
+                default:
+                    app.chartDataHandler.charts[key] = new LineChart(value.querySelector('.media > svg'));
+            }
         });
     },
+
 
     // Event-listener for elements starting a WebSocket connection
     onClickStartSocket: function (e) {
@@ -107,10 +120,15 @@ Object.prototype.on = function (event, callback) {
     }
 };
 
-// First char uppercase
-String.prototype.capitalize = function() {
+/**
+ * Uppercase the first char of a string
+ *
+ * @returns {string}
+ */
+String.prototype.capitalize = function () {
     return this.charAt(0).toUpperCase() + this.slice(1)
 };
+
 
 /**
  * Randomize array element order in-place.
@@ -125,4 +143,15 @@ Array.prototype.shuffle = function () {
         this[i] = this[j];
         this[j] = temp;
     }
+};
+
+
+/**
+ * Converts kebabcase-written style with camelcase style
+ * https://stackoverflow.com/a/6661012
+ *
+ * @returns {string}
+ */
+String.prototype.kebabToCamelCase = function () {
+    return this.replace(/-([a-z])/g, function (g) { return g[1].toUpperCase(); }).capitalize();
 };

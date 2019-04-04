@@ -11,7 +11,7 @@ function GaugeChart(element) {
     // Svg Element in the document
     this.element = element;
 
-    // Mapping the datatypes to the chart
+    // Mapping the data-types to the chart
     this.chartMap = [];
 
     // Chart svg
@@ -111,8 +111,7 @@ function GaugeChart(element) {
             return 'translate(' + r + ',' + r + ')';
         }
 
-        me.svg = d3.select(me.element)
-            .attr('class', 'gauge');
+        me.svg = d3.select(me.element);
 
         let centerTx = centerTranslation();
 
