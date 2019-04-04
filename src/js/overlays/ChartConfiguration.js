@@ -173,6 +173,10 @@ let chartConfiguration = {
                 // Set Chart to gauge-chart
                 app.chartDataHandler.charts[me.chartId] = new GaugeChart(me.changingCard.querySelector('.media > svg'));
                 break;
+            case "number-chart":
+                // Set Chart to number-chart
+                app.chartDataHandler.charts[me.chartId] = new NumberChart(me.changingCard.querySelector('.media > svg'));
+                break;
             case "line-chart":
             default:
                 // Set Chart to line-chart
