@@ -126,6 +126,12 @@ a, button {
   }
 }
 
+form {
+  .form-group {
+    margin-bottom: 16px;
+  }
+}
+
 // Page Content
 .content-wrapper {
   display: grid;
@@ -188,10 +194,6 @@ a, button {
 
     .media {
       margin: 0 0 16px;
-
-      .gauge {
-        padding-top: 16px;
-      }
     }
 
     .supporting-text {
@@ -232,7 +234,15 @@ a, button {
     height: auto;
     width: 720px;
     border: 1px transparent solid;
-    padding: 16px 20px 12px;
+
+    .overlay--header {
+      border-bottom: 1px solid black;
+      padding: 16px 20px 12px;
+    }
+
+    .overlay--body {
+      padding: 16px 20px 12px;
+    }
   }
 }
 
@@ -300,7 +310,7 @@ a, button {
     -webkit-appearance: none;
     background-color: transparent;
     margin-bottom: 1px;
-    margin-top: 48px;
+    margin-top: 24px;
 
     &:focus ~ label, &:valid ~ label {
       color: @primaryColor;
