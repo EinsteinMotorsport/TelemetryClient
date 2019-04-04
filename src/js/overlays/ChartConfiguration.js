@@ -169,9 +169,13 @@ let chartConfiguration = {
 
         // Set chart-type
         switch (chartTypeSelect.value) {
-            case "linechart":
+            case "gauge-chart":
+                // Set Chart to gauge-chart
+                app.chartDataHandler.charts[me.chartId] = new GaugeChart(me.changingCard.querySelector('.media > svg'));
+                break;
+            case "line-chart":
             default:
-                // Set Chart to linechart
+                // Set Chart to line-chart
                 app.chartDataHandler.charts[me.chartId] = new LineChart(me.changingCard.querySelector('.media > svg'));
         }
 

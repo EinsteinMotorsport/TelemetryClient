@@ -46,6 +46,9 @@ function LineChart(element) {
     this.init = function () {
         this.registerEvents();
 
+        // Clear chart element
+        this.element.innerHTML = "";
+
         // Shuffle the colors used by the lines
         this.colors.shuffle();
 
