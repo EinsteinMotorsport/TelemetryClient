@@ -30,6 +30,11 @@ let app = {
 
         // Event-listener for elements stopping a WebSocket connection
         document.getElementsByClassName('stop-socket').on('click', me.onClickStopSocket);
+
+        // Listen for changes on text inputs to design the label correctly
+        document.querySelectorAll('input[type="text"]').on('keyup', function (e) {
+            me.onKeyupInputText(e);
+        });
     },
 
 
@@ -88,6 +93,20 @@ let app = {
             this.websocket.close();
         }
     },
+
+
+    /**
+     * Listen for changes on text inputs to design the label correctly
+     *
+     * @param e
+     */
+    onKeyupInputText: function (e) {
+        if (e.target.value === "") {
+            e.target.classList.remove("has-content");
+        } else {
+            e.target.classList.add("has-content");
+        }
+    }
 };
 
 // Start application when document is completely loaded

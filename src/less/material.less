@@ -274,11 +274,11 @@ form {
 
 .input {
   position: relative;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
 
   input, select {
     font-size: 18px;
-    padding: 10px 10px 10px 5px;
+    padding: 8px 8px 8px 5px;
     display: block;
     width: 100%;
     border: none;
@@ -288,8 +288,8 @@ form {
       outline: none;
     }
 
-    &:focus ~ label {
-      top: -20px;
+    &.has-content ~ label, &:focus ~ label {
+      top: -8px;
       font-size: 14px;
       color: @primaryColor;
     }
@@ -314,7 +314,7 @@ form {
 
     &:focus ~ label, &:valid ~ label {
       color: @primaryColor;
-      top: -20px;
+      top: -8px;
       transition: 0.2s ease all;
       font-size: 14px;
     }
