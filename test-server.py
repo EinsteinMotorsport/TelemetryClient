@@ -12,7 +12,7 @@ from random import randint  # Random generator
 
 # Config
 port = 7777  # Websocket Port
-timeInterval = 10  # Milliseconds
+timeInterval = 50  # Milliseconds
 
 
 class WSHandler(tornado.websocket.WebSocketHandler):
@@ -29,7 +29,25 @@ class WSHandler(tornado.websocket.WebSocketHandler):
 
     def send_values(self):
         # Generates random values to send via websocket
-        info = {0: randint(0, 3), 1: randint(0, 70)}
+        info = [0, randint(0, 70)]
+        to_send_info = json.dumps(info)
+
+        print(to_send_info)
+        self.write_message(to_send_info)
+        # Generates random values to send via websocket
+        info = [1, randint(0, 70)]
+        to_send_info = json.dumps(info)
+
+        print(to_send_info)
+        self.write_message(to_send_info)
+        # Generates random values to send via websocket
+        info = [2, randint(0, 70)]
+        to_send_info = json.dumps(info)
+
+        print(to_send_info)
+        self.write_message(to_send_info)
+        # Generates random values to send via websocket
+        info = [3, randint(0, 70)]
         to_send_info = json.dumps(info)
 
         print(to_send_info)
