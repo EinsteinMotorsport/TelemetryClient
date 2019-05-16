@@ -7,7 +7,7 @@
  */
 function LineChart(element) {
     // Svg Element in the document
-    this.element = element;
+    this.element = element.parentNode;
 
     // Mapping the data-types to the chart
     this.chartMap = [];
@@ -18,15 +18,30 @@ function LineChart(element) {
     // Data displayed ordered by lineId
     this.data = [];
 
+    // Value which describes the upper bounding of the y-axis
+    this.maxDisplayedValue = 0;
+
     // Contains the d3js line-generators
     this.lines = [];
 
     // Axis container
     this.xAxis = null;
     this.yAxis = null;
+    this.xScale = null;
+    this.yScale = null;
+    this.xAxisGroup = null;
+    this.yAxisGroup = null;
 
-    // Graph element
-    this.g = null;
+    this.width = 500;
+    this.height = 200;
+
+    // Chart props
+    this.margin = {
+        top: 8,
+        right: 24,
+        bottom: 24,
+        left: 24
+    };
 
     // Possible colors for graph lines
     this.colors = [
@@ -47,6 +62,7 @@ function LineChart(element) {
         this.registerEvents();
 
         // Clear chart element
+        console.log(this.element);
         this.element.innerHTML = "";
 
         // Shuffle the colors used by the lines
@@ -60,7 +76,11 @@ function LineChart(element) {
      * Register the object events
      */
     this.registerEvents = function () {
+        let me = this;
 
+        window.on("resize", function (e) {
+            me.onResizeWindow();
+        });
     };
 
 
@@ -73,47 +93,46 @@ function LineChart(element) {
         // Amount of displayed values
         me.n = 30;
 
-        // Select the svg
-        me.svg = d3.select(me.element);
+        // Create the svg
+        me.svg = d3.select(me.element).append('svg:svg')
+            .attr('width', me.width)
+            .attr('height', me.height)
+            .attr('class', 'svg-plot')
+            .append('g')
+            .attr('transform', `translate(${me.margin.left}, ${me.margin.top})`);
 
-        // Chart props
-        let margin = {
-            top: 20,
-            right: 20,
-            bottom: 20,
-            left: 40
-        };
-        let width = document.getElementsByClassName('media')[0].clientWidth;
-        let height = +me.svg.attr("height") - margin.top - margin.bottom;
+        // Create the canvas
+        me.canvas = d3.select(me.element).append('canvas')
+            .attr('width', me.width)
+            .attr('height', me.height)
+            .style('margin-left', me.margin.left + 'px')
+            .style('margin-top', me.margin.top + 'px')
+            .attr('class', 'canvas-plot');
 
-        // Add basic elements to svg
-        me.g = me.svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-        me.g.append("defs").append("clipPath")
-            .attr("id", "clip")
-            .append("rect")
-            .attr("width", width)
-            .attr("height", height);
+        // Define y-scale
+        me.yScale = d3.scaleLinear()
+            .domain([1, 0])
+            .range([me.margin.top, me.height - me.margin.bottom]);
 
-
-        // Define y-axis
-        me.yAxis = d3.scaleLinear()
-            .domain([0, 70])
-            .range([height, 0]);
-        me.g.append("g")
-            .attr("class", "axis axis--y")
-            .call(d3.axisLeft(me.yAxis).ticks(6));
-
-
-        // Define x-axis
-        me.xAxis = d3.scaleLinear()
+        // Define x-scale
+        me.xScale = d3.scaleLinear()
             .domain([0, me.n - 1])
-            .range([0, width]);
-        me.g.append("g")
-            .attr("class", "axis axis--x")
-            .attr("transform", "translate(0," + me.yAxis(0) + ")")
-            .call(d3.axisBottom(me.xAxis));
-    };
+            .range([me.margin.left, me.width - me.margin.right]);
 
+        // Add axis
+        me.xAxis = d3.axisBottom(me.xScale);
+        me.yAxis = d3.axisLeft(me.yScale);
+
+        // Add x-axis as a g element
+        me.xAxisGroup = me.svg.append("g")
+            .attr("transform", "translate(" + [0, me.height - me.margin.bottom] + ")")
+            .call(me.xAxis);
+
+        // Add y-axis as a g element
+        me.yAxisGroup = me.svg.append("g")
+            .attr("transform", "translate(" + [me.margin.left, 0] + ")")
+            .call(me.yAxis);
+    };
 
     /**
      * Adds a value to one line of the chart
@@ -135,10 +154,23 @@ function LineChart(element) {
         // If data set reaches the limit defined by "n"
         if (me.data[lineId].length >= me.n) {
             // Slide it to the left.
-            me.svg.select(".line-" + lineId).attr("transform", "translate(" + me.xAxis(-1) + ",0)").transition();
+            me.svg.select(".line-" + lineId).attr("transform", "translate(" + me.xScale(-1) + ",0)").transition();
 
             // Pop the old data point off the front.
             me.data[lineId].shift();
+        }
+
+
+        // Update scale if new value is bigger than the last max value of the chart
+        if (value > this.maxDisplayedValue) {
+            this.maxDisplayedValue = value;
+
+            // Update the y-scale
+            me.yScale.domain([this.maxDisplayedValue, 0]).range([me.margin.top, me.height - me.margin.bottom]);
+            me.yAxis.scale(me.yScale);
+
+            // Update the y-axis
+            me.yAxisGroup.call(me.yAxis);
         }
     };
 
@@ -158,15 +190,14 @@ function LineChart(element) {
         // Add line to array
         me.lines[lineId] = d3.line()
             .x(function (d, i) {
-                return me.xAxis(i);
+                return me.xScale(i);
             })
             .y(function (d, i) {
-                return me.yAxis(d);
+                return me.yScale(d);
             });
 
         // Append line to the svg element
-        me.g.append("g")
-            .attr("clip-path", "url(#clip)")
+        me.svg.append("g")
             .append("path")
             .datum(me.data[lineId])
             .attr("class", "line line-" + lineId)
@@ -191,6 +222,27 @@ function LineChart(element) {
         me.lines.slice(lineId, 1);
     };
 
+
+    /**
+     * Handle the resize of the window and rescale the x-axis
+     *
+     * @param e
+     */
+    this.onResizeWindow = function (e) {
+        let me = this;
+
+        // TODO: Make magic happen
+
+
+        console.log("resize");
+
+        // Update the y-scale
+        me.xScale.domain([this.maxDisplayedValue, 0]).range([me.margin.left, me.width - me.margin.right]);
+        me.xAxis.scale(me.xScale);
+
+        // Update the y-axis
+        me.xAxisGroup.call(me.xAxis);
+    };
 
     // Init the chart
     this.init();

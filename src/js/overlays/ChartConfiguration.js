@@ -182,7 +182,11 @@ let chartConfiguration = {
             default:
                 // Set Chart to line-chart
                 app.chartDataHandler.charts[me.chartId] = new LineChart(me.changingCard.querySelector('.media > svg'));
+                chartTypeSelect.value = "line-chart";
         }
+
+        // Set chart-type to card
+        me.changingCard.dataset.chartType = chartTypeSelect.value;
     },
 
 
@@ -249,5 +253,5 @@ let chartConfiguration = {
             // Preselect the chart type
             this.selectChartType(this.chartType);
         }
-    }
+    },
 };

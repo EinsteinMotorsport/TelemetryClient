@@ -67,7 +67,8 @@ let app = {
         let me = this;
 
         // New connection to local running WebSocket Server
-        me.websocket = new WebSocket("ws://localhost:7777/service");
+        me.websocket = new WebSocket("ws://127.0.0.1:7777/service");
+        //me.websocket = new WebSocket("ws://141.59.140.154:7777/service");
 
         // When connection is established
         me.websocket.onopen = function () {
