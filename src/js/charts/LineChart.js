@@ -156,21 +156,26 @@ function LineChart(element) {
             // Slide it to the left.
             me.svg.select(".line-" + lineId).attr("transform", "translate(" + me.xScale(-1) + ",0)").transition();
 
+            // The value which will be dropped
+            let droppedValue = me.data[lineId][0];
+
             // Pop the old data point off the front.
             me.data[lineId].shift();
+
+            // Rescale if max value dropped out
+            if (droppedValue >= me.maxDisplayedValue) {
+                // Get new max value
+                me.maxDisplayedValue = me.getMaxValueFromData();
+                // Rescale
+                me.rescaleAxis()
+            }
         }
 
-
         // Update scale if new value is bigger than the last max value of the chart
-        if (value > this.maxDisplayedValue) {
-            this.maxDisplayedValue = value;
-
-            // Update the y-scale
-            me.yScale.domain([this.maxDisplayedValue, 0]).range([me.margin.top, me.height - me.margin.bottom]);
-            me.yAxis.scale(me.yScale);
-
-            // Update the y-axis
-            me.yAxisGroup.call(me.yAxis);
+        if (value > me.maxDisplayedValue) {
+            me.maxDisplayedValue = value;
+            // Rescale the axis
+            me.rescaleAxis();
         }
     };
 
@@ -201,7 +206,7 @@ function LineChart(element) {
             .append("path")
             .datum(me.data[lineId])
             .attr("class", "line line-" + lineId)
-            .attr("stroke", `${this.colors[lineId % this.colors.length]}`)
+            .attr("stroke", `${me.colors[lineId % me.colors.length]}`)
             .attr("stroke-width", 2)
             .attr("fill", "none")
             .transition()
@@ -221,6 +226,39 @@ function LineChart(element) {
         // Remove line from array
         me.lines.slice(lineId, 1);
     };
+
+
+    /**
+     * Loop through data array an return the max value of it
+     *
+     * @returns the max value currently displayed in the chart
+     */
+    this.getMaxValueFromData = function () {
+        let maxValue = 0;
+        this.data.forEach((arr) => {
+            let max = Math.max(...arr);
+            if (max > maxValue) {
+                maxValue = max;
+            }
+        });
+        return maxValue;
+    };
+
+
+    /**
+     * Rescales the axis using the maxDisplayValue for max y-axis value
+     */
+    this.rescaleAxis = function () {
+        let me = this;
+
+        // Update the y-scale
+        me.yScale.domain([me.maxDisplayedValue, 0]).range([me.margin.top, me.height - me.margin.bottom]);
+        me.yAxis.scale(me.yScale);
+
+        // Update the y-axis
+        me.yAxisGroup.call(me.yAxis);
+    };
+
 
 
     /**
