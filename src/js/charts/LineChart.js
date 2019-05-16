@@ -153,9 +153,6 @@ function LineChart(element) {
 
         // If data set reaches the limit defined by "n"
         if (me.data[lineId].length >= me.n) {
-            // Slide it to the left.
-            me.svg.select(".line-" + lineId).attr("transform", "translate(" + me.xScale(-1) + ",0)").transition();
-
             // The value which will be dropped
             let droppedValue = me.data[lineId][0];
 
