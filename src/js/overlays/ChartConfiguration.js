@@ -66,7 +66,7 @@ let chartConfiguration = {
         let dataTypeSelect = document.getElementById("chart-configuration-data-type");
 
         // Changing chart
-        let chart = app.chartDataHandler.charts[me.chartId];
+        let chart = app.chartDataHandler.chartBuffers[me.chartId].chart;
 
         // Append a new data type to chartmap
         chart.chartMap.push(dataTypeSelect.value);
@@ -93,7 +93,7 @@ let chartConfiguration = {
         let dataTypeId = e.target.dataset.id;
 
         // Changing chart
-        let chart = app.chartDataHandler.charts[me.chartId];
+        let chart = app.chartDataHandler.chartBuffers[me.chartId].chart;
 
         // Delete the element from the datahandler
         for (let i = 0; i < chart.chartMap.length; i++) {
@@ -172,16 +172,16 @@ let chartConfiguration = {
         switch (chartTypeSelect.value) {
             case "gauge-chart":
                 // Set Chart to gauge-chart
-                app.chartDataHandler.charts[me.chartId] = new GaugeChart(me.changingCard.querySelector('.media > svg'));
+                app.chartDataHandler.chartBuffers[me.chartId].chart = new GaugeChart(me.changingCard.querySelector('.media > svg'));
                 break;
             case "number-chart":
                 // Set Chart to number-chart
-                app.chartDataHandler.charts[me.chartId] = new NumberChart(me.changingCard.querySelector('.media > svg'));
+                app.chartDataHandler.chartBuffers[me.chartId].chart = new NumberChart(me.changingCard.querySelector('.media > svg'));
                 break;
             case "line-chart":
             default:
                 // Set Chart to line-chart
-                app.chartDataHandler.charts[me.chartId] = new LineChart(me.changingCard.querySelector('.media > svg'));
+                app.chartDataHandler.chartBuffers[me.chartId].chart = new LineChart(me.changingCard.querySelector('.media > svg'));
                 chartTypeSelect.value = "line-chart";
         }
 
@@ -238,10 +238,10 @@ let chartConfiguration = {
      */
     load: function () {
         // If chart config exists
-        if (app.chartDataHandler.charts[this.chartId]) {
+        if (app.chartDataHandler.chartBuffers[this.chartId]) {
 
             // ChartMap contains all data types displayed in the chart
-            let chartMap = app.chartDataHandler.charts[this.chartId].chartMap || [];
+            let chartMap = app.chartDataHandler.chartBuffers[this.chartId].chart.chartMap || [];
 
             // If data types are set, loop through them and display them in the list of added data types
             if (chartMap.length !== 0) {

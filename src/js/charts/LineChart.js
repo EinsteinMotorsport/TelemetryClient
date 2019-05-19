@@ -9,7 +9,7 @@ function LineChart(element) {
     // Svg Element in the document
     this.element = element.parentNode;
 
-    // Mapping the data-types to the chart
+    // Contains the name of each data-type added to the chart
     this.chartMap = [];
 
     // Chart svg
@@ -134,6 +134,7 @@ function LineChart(element) {
             .call(me.yAxis);
     };
 
+
     /**
      * Adds a value to one line of the chart
      *
@@ -142,8 +143,6 @@ function LineChart(element) {
      */
     this.push = function (lineId, value) {
         let me = this;
-
-        console.log("LineChart:push data-array", me.data);
 
         // Push a new data point onto the back
         me.data[lineId].push(value);

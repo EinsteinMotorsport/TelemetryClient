@@ -46,17 +46,21 @@ let app = {
     initCharts: function () {
         // Select each chart element and loop through all of them
         document.querySelectorAll("[data-chart-id]").forEach((value, key) => {
+
+            // Add new buffer as container for a chart of type ChartInterface
+            app.chartDataHandler.chartBuffers[key] = new ChartBuffer();
+
             // Get the chart type from the data-attribute and decide which chart object is needed
             switch (value.getAttribute("data-chart-type")) {
                 case "number-chart":
-                    app.chartDataHandler.charts[key] = new NumberChart(value.querySelector('.media > svg'));
+                    app.chartDataHandler.chartBuffers[key].chart = new NumberChart(value.querySelector('.media > svg'));
                     break;
                 case "gauge-chart":
-                    app.chartDataHandler.charts[key] = new GaugeChart(value.querySelector('.media > svg'));
+                    app.chartDataHandler.chartBuffers[key].chart = new GaugeChart(value.querySelector('.media > svg'));
                     break;
                 case "line-chart":
                 default:
-                    app.chartDataHandler.charts[key] = new LineChart(value.querySelector('.media > svg'));
+                    app.chartDataHandler.chartBuffers[key].chart = new LineChart(value.querySelector('.media > svg'));
             }
         });
     },

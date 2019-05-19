@@ -3,9 +3,10 @@ function DataHandler() {
     /**
      * Contains all charts ordered by chartId
      *
-     * @type {ChartInterface[]}
+     * @type {ChartBuffer[]}
      */
-    this.charts = [];
+    this.chartBuffers = [];
+
 
     // Data pushed to handle
     this.push = function (json) {
@@ -22,14 +23,11 @@ function DataHandler() {
 
 
         // Loop through all charts and look for the data type in the map
-        for (let i = 0; i < me.charts.length; i++) {
-            for (let j = 0; j < me.charts[i].chartMap.length; j++) {
+        for (let i = 0; i < me.chartBuffers.length; i++) {
+            for (let j = 0; j < me.chartBuffers[i].chart.chartMap.length; j++) {
                 // If the data type is defined for the chart, push the received value to it
-                if (dataMap[data[0]] === me.charts[i].chartMap[j]) {
-                    console.log("chart", me.charts[i]);
-                    console.log("data-type", me.charts[i].chartMap[j]);
-                    console.log("matched data-type-id", dataTypes[me.charts[i].chartMap[j]].id);
-                    me.charts[i].push(dataTypes[me.charts[i].chartMap[j]].id, data[1]);
+                if (dataMap[data[0]] === me.chartBuffers[i].chart.chartMap[j]) {
+                    me.chartBuffers[i].push(dataTypes[me.chartBuffers[i].chart.chartMap[j]].id, data[1]);
                 }
             }
         }
