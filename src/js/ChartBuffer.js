@@ -25,13 +25,9 @@ function ChartBuffer() {
      * Init the buffer with interval to move data from the buffer to the chart
      */
     this.init = function () {
-        this.interval = setInterval(() => {
-            this.movinga();
-        }, this.intervalTime)
+        this.changeInterval(this.intervalTime);
     };
 
-    // Launch buffer
-    this.init();
 
     /**
      * Move current values of the buffer to the chart
@@ -56,4 +52,32 @@ function ChartBuffer() {
         me.values[dataTypeId] = value;
     };
 
+
+    /**
+     * Updates the interval time to a new one
+     *
+     * @param interval
+     * @return {boolean}
+     */
+    this.changeInterval = function (interval) {
+        let me = this;
+
+        // Validate number
+        if (!Number.isNumeric(interval)) {
+            return false;
+        }
+        interval = parseInt(interval);
+
+        // Delete old interval
+        clearInterval(this.interval);
+
+        // Set new one
+        this.interval = setInterval(function () {
+            me.movinga();
+        }, interval);
+    };
+
+
+    // Launch buffer
+    this.init();
 }

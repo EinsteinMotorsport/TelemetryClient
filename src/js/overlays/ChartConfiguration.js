@@ -50,6 +50,11 @@ let chartConfiguration = {
                 me.onClickChartValueRemove(e);
             }
         });
+
+        // On change timer interval of chart buffer
+        document.getElementById("chart-configuration-interval").on('change', function (e) {
+            me.onChangeChartBufferInterval(e);
+        });
     },
 
 
@@ -252,6 +257,26 @@ let chartConfiguration = {
 
             // Preselect the chart type
             this.selectChartType(this.chartType);
+
+            // Load interval time to form
+            document.getElementById("chart-configuration-interval").value =
+                app.chartDataHandler.chartBuffers[this.chartId].intervalTime;
         }
     },
+
+
+    /**
+     * On change the chart buffer interval time:
+     * update interval of buffer to refresh chart values in different interval
+     * @param e
+     */
+    onChangeChartBufferInterval: function (e) {
+        let me = this;
+
+        // New interval time in ms
+        let timerInterval = e.target.value;
+
+        // Update buffer
+        app.chartDataHandler.chartBuffers[me.chartId].changeInterval(timerInterval);
+    }
 };

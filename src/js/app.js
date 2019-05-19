@@ -179,3 +179,14 @@ Array.prototype.shuffle = function () {
 String.prototype.kebabToCamelCase = function () {
     return this.replace(/-([a-z])/g, function (g) { return g[1].toUpperCase(); }).capitalize();
 };
+
+
+/**
+ * Checks if parameter is number
+ * https://stackoverflow.com/questions/9716468/pure-javascript-a-function-like-jquerys-isnumeric
+ * @param n
+ * @return {boolean}
+ */
+Number.isNumeric = function (n) {
+    return !isNaN(parseFloat(n)) && isFinite(n);
+};
