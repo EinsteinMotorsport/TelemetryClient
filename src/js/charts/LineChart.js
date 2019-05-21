@@ -32,13 +32,13 @@ function LineChart(element) {
     this.xAxisGroup = null;
     this.yAxisGroup = null;
 
-    this.width = 500;
-    this.height = 200;
+    this.width = 700;
+    this.height = 230;
 
     // Chart props
     this.margin = {
         top: 8,
-        right: 24,
+        right: 200,
         bottom: 24,
         left: 24
     };
@@ -46,12 +46,12 @@ function LineChart(element) {
     // Possible colors for graph lines
     this.colors = [
         '#1A237E',
-        '#827717',
         '#D81B60',
-        '#3E2723',
-        '#004D40',
         '#FF6F00',
         '#43A047',
+        '#3E2723',
+        '#004D40',
+        '#827717',
     ];
 
 
@@ -116,7 +116,7 @@ function LineChart(element) {
         // Define x-scale
         me.xScale = d3.scaleLinear()
             .domain([0, me.n - 1])
-            .range([me.margin.left, me.width - me.margin.right]);
+            .range([me.margin.left, me.width - (me.margin.right + me.margin.left)]);
 
         // Add axis
         me.xAxis = d3.axisBottom(me.xScale);
@@ -131,6 +131,9 @@ function LineChart(element) {
         me.yAxisGroup = me.svg.append("g")
             .attr("transform", "translate(" + [me.margin.left, 0] + ")")
             .call(me.yAxis);
+
+        // Print chart legend
+        me.printLegend();
     };
 
 
@@ -201,12 +204,24 @@ function LineChart(element) {
             .append("path")
             .datum(me.data[lineId])
             .attr("class", "line line-" + lineId)
-            .attr("stroke", `${me.colors[lineId % me.colors.length]}`)
+            .attr("stroke", `${me.color(me.lines.size() - 1)}`)
             .attr("stroke-width", 2)
             .attr("fill", "none")
             .transition()
             .duration(500)
             .ease(d3.easeLinear);
+
+        // Redraw legend
+        me.printLegend();
+    };
+
+
+    /**
+     * Returns color for chart line by ongoing parameter
+     * @param d
+     */
+    this.color = function (d) {
+        return this.colors[d % this.colors.length];
     };
 
 
@@ -220,6 +235,9 @@ function LineChart(element) {
 
         // Remove line from array
         me.lines.slice(lineId, 1);
+
+        // Redraw legend
+        me.printLegend();
     };
 
 
@@ -255,7 +273,6 @@ function LineChart(element) {
     };
 
 
-
     /**
      * Handle the resize of the window and rescale the x-axis
      *
@@ -270,12 +287,35 @@ function LineChart(element) {
         console.log("resize");
 
         // Update the y-scale
-        me.xScale.domain([this.maxDisplayedValue, 0]).range([me.margin.left, me.width - me.margin.right]);
-        me.xAxis.scale(me.xScale);
+        //me.yScale.domain([this.maxDisplayedValue, 0]).range([me.margin.left, me.width - me.margin.right]);
+        //me.yAxis.scale(me.yScale);
 
         // Update the y-axis
-        me.xAxisGroup.call(me.xAxis);
+        //me.yAxisGroup.call(me.yAxis);
     };
+
+
+    /**
+     *
+     * helpful guide: https://www.d3-graph-gallery.com/graph/custom_legend.html
+     */
+    this.printLegend = function () {
+        let me = this;
+        let offset = 0;
+
+        // Delete prev legend
+        me.svg.select(".chart-line-legend").remove();
+
+        // Create new legend
+        me.legend = me.svg.append("g").attr("class", "chart-line-legend");
+        me.chartMap.forEach((value, key) => {
+            me.legend.append("circle").attr("cx", 500).attr("cy", 50 + offset).attr("r", 6).style("fill", me.color(key));
+            me.legend.append("text").attr("x", 520).attr("y", 50 + offset).text(dataTypes[value]['translation'])
+                .style("font-size", "15px").attr("alignment-baseline", "middle");
+            offset += 20;
+        });
+    };
+
 
     // Init the chart
     this.init();

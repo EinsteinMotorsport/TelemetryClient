@@ -5,7 +5,7 @@ let required = function () {throw new Error('Interface not implemented')};
  *
  * @interface
  */
-let ChartInterface = {
+const ChartInterface = {
     init: required,
     addDataType: required,
     removeDataType: required,

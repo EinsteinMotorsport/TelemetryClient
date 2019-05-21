@@ -190,3 +190,16 @@ String.prototype.kebabToCamelCase = function () {
 Number.isNumeric = function (n) {
     return !isNaN(parseFloat(n)) && isFinite(n);
 };
+
+
+/**
+ * Returns the real size of an array. Length returns only the biggest index.
+ * @return int
+ */
+Array.prototype.size = function () {
+    let counter = 0;
+    this.forEach(() => {
+        counter++;
+    });
+    return counter;
+};
