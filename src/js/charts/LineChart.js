@@ -74,8 +74,8 @@ function LineChart(element) {
     this.setup = function () {
         let me = this;
 
-        // Amount of displayed values
-        me.n = 30;
+        // Displayed seconds
+        me.n = 60;
 
         // Create the svg
         me.svg = d3.select(me.element).append('svg:svg')
@@ -100,7 +100,7 @@ function LineChart(element) {
 
         // Define x-scale
         me.xScale = d3.scaleLinear()
-            .domain([0, me.n - 1])
+            .domain([-(me.n - 1), 0])
             .range([me.margin.left, me.width - (me.margin.right + me.margin.left)]);
 
         // Add axis
@@ -173,14 +173,14 @@ function LineChart(element) {
         let me = this;
 
         // Init empty data-array matching the line
-        me.data[dataType] = [];
+        me.data[dataType] = new Array(me.n-1).fill(0);
 
         // Add line to array
         me.lines[dataType] = d3.line()
             .x(function (d, i) {
-                return me.xScale(i);
+                return me.xScale(i-me.n+1);
             })
-            .y(function (d, i) {
+            .y(function (d) {
                 return me.yScale(d);
             });
 
