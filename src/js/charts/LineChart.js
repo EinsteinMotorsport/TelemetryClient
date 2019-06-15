@@ -43,18 +43,6 @@ function LineChart(element) {
         left: 24
     };
 
-    // Possible colors for graph lines
-    this.colors = [
-        '#1A237E',
-        '#D81B60',
-        '#FF6F00',
-        '#43A047',
-        '#3E2723',
-        '#004D40',
-        '#827717',
-    ];
-
-
     /**
      * Initializes the chart
      */
@@ -63,9 +51,6 @@ function LineChart(element) {
 
         // Clear chart element
         this.element.innerHTML = "";
-
-        // Shuffle the colors used by the lines
-        this.colors.shuffle();
 
         this.setup();
     };
@@ -140,25 +125,25 @@ function LineChart(element) {
     /**
      * Adds a value to one line of the chart
      *
-     * @param lineId the data-type-id
+     * @param dataType the data-type-id
      * @param value
      */
-    this.push = function (lineId, value) {
+    this.push = function (dataType, value) {
         let me = this;
 
         // Push a new data point onto the back
-        me.data[lineId].push(value);
+        me.data[dataType].push(value);
 
         // Redraw the line
-        me.svg.select(".line-" + lineId).attr("d", me.lines[lineId]).attr("transform", null);
+        me.svg.select(".line-" + dataType).attr("d", me.lines[dataType]).attr("transform", null);
 
         // If data set reaches the limit defined by "n"
-        if (me.data[lineId].length >= me.n) {
+        if (me.data[dataType].length >= me.n) {
             // The value which will be dropped
-            let droppedValue = me.data[lineId][0];
+            let droppedValue = me.data[dataType][0];
 
             // Pop the old data point off the front.
-            me.data[lineId].shift();
+            me.data[dataType].shift();
 
             // Rescale if max value dropped out
             if (droppedValue >= me.maxDisplayedValue) {
@@ -182,16 +167,16 @@ function LineChart(element) {
      * Adds a line to the line chart.
      * Each data-type is represented by a line in this graph.
      *
-     * @param lineId number Should match data-type id
+     * @param dataType number Should match data-type id
      */
-    this.addDataType = function (lineId) {
+    this.addDataType = function (dataType) {
         let me = this;
 
         // Init empty data-array matching the line
-        me.data[lineId] = [];
+        me.data[dataType] = [];
 
         // Add line to array
-        me.lines[lineId] = d3.line()
+        me.lines[dataType] = d3.line()
             .x(function (d, i) {
                 return me.xScale(i);
             })
@@ -202,9 +187,9 @@ function LineChart(element) {
         // Append line to the svg element
         me.svg.append("g")
             .append("path")
-            .datum(me.data[lineId])
-            .attr("class", "line line-" + lineId)
-            .attr("stroke", `${me.color(me.lines.size() - 1)}`)
+            .datum(me.data[dataType])
+            .attr("class", "line line-" + dataType)
+            .attr("stroke", dataTypes[dataType]['color'])
             .attr("stroke-width", 2)
             .attr("fill", "none")
             .transition()
@@ -215,30 +200,26 @@ function LineChart(element) {
         me.printLegend();
     };
 
-
-    /**
-     * Returns color for chart line by ongoing parameter
-     * @param d
-     */
-    this.color = function (d) {
-        return this.colors[d % this.colors.length];
-    };
-
-
     /**
      * Removes a line from the line chart
      *
-     * @param lineId
+     * @param key
      */
-    this.removeDataType = function (lineId) {
+    this.removeDataType = function (key) {
         let me = this;
 
+        console.log("key", key);
+
         // Remove line from array
-        me.lines.slice(lineId, 1);
+        me.lines.splice(key, 1);
+
+        // Remove the line from the drawn chart
+        me.svg.selectAll('.line').filter((d, i) => i === key).remove();
 
         // Redraw legend
         me.printLegend();
     };
+
 
 
     /**
@@ -248,7 +229,10 @@ function LineChart(element) {
      */
     this.getMaxValueFromData = function () {
         let maxValue = 0;
-        this.data.forEach((arr) => {
+        let me = this;
+
+        Object.keys(me.data).forEach((key) => {
+            let arr = me.data[key];
             let max = Math.max(...arr);
             if (max > maxValue) {
                 maxValue = max;
@@ -308,8 +292,8 @@ function LineChart(element) {
 
         // Create new legend
         me.legend = me.svg.append("g").attr("class", "chart-line-legend");
-        me.chartMap.forEach((value, key) => {
-            me.legend.append("circle").attr("cx", 500).attr("cy", 50 + offset).attr("r", 6).style("fill", me.color(key));
+        me.chartMap.forEach((value) => {
+            me.legend.append("circle").attr("cx", 500).attr("cy", 50 + offset).attr("r", 6).style("fill", dataTypes[value]["color"]);
             me.legend.append("text").attr("x", 520).attr("y", 50 + offset).text(dataTypes[value]['translation'])
                 .style("font-size", "15px").attr("alignment-baseline", "middle");
             offset += 20;

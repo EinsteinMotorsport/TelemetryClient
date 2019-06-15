@@ -83,7 +83,7 @@ let chartConfiguration = {
         this.addDataTypeToList(selectedElement.value, selectedElement.innerHTML);
 
         // Add the data-type to the chart
-        chart.addDataType(dataTypes[selectedElement.value].id);
+        chart.addDataType(selectedElement.value);
     },
 
 
@@ -104,10 +104,13 @@ let chartConfiguration = {
         for (let i = 0; i < chart.chartMap.length; i++) {
             if (chart.chartMap[i] === dataTypeId) {
                 chart.chartMap.splice(i, 1);
+
+                // Remove data-type from chart
+                chart.removeDataType(i);
             }
         }
 
-        // Remove the element from the DOM
+        // Remove the list-element from the DOM
         this.removeDataTypeFromList(dataTypeId);
     },
 

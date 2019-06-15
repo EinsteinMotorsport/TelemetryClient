@@ -33,7 +33,10 @@ function ChartBuffer() {
      * Move current values of the buffer to the chart
      */
     this.movinga = function () {
-        this.values.forEach((val, key) => {
+        let me = this;
+
+        Object.keys(me.values).forEach((key) => {
+            let val = me.values[key];
             this.chart.push(key, val);
         });
     };
@@ -42,14 +45,14 @@ function ChartBuffer() {
     /**
      * Push a value to the buffer
      *
-     * @param dataTypeId
+     * @param dataType
      * @param value
      */
-    this.push = function (dataTypeId, value) {
+    this.push = function (dataType, value) {
         let me = this;
 
         // Push a new data point onto the back
-        me.values[dataTypeId] = value;
+        me.values[dataType] = value;
     };
 
 

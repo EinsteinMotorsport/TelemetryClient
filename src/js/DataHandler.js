@@ -27,7 +27,7 @@ function DataHandler() {
             for (let j = 0; j < me.chartBuffers[i].chart.chartMap.length; j++) {
                 // If the data type is defined for the chart, push the received value to it
                 if (dataMap[data[0]] === me.chartBuffers[i].chart.chartMap[j]) {
-                    me.chartBuffers[i].push(dataTypes[me.chartBuffers[i].chart.chartMap[j]].id, data[1]);
+                    me.chartBuffers[i].push(me.chartBuffers[i].chart.chartMap[j], data[1]);
                 }
             }
         }
