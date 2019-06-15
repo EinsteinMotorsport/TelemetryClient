@@ -9,7 +9,7 @@
  */
 function ChartBuffer() {
 
-    this.intervalTime = 2000;
+    this.intervalTime = 10;
     this.interval = null;
 
 

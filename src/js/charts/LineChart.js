@@ -75,7 +75,7 @@ function LineChart(element) {
         let me = this;
 
         // Displayed seconds
-        me.n = 60;
+        me.n = 600;
 
         // Create the svg
         me.svg = d3.select(me.element).append('svg:svg')
@@ -104,7 +104,7 @@ function LineChart(element) {
             .range([me.margin.left, me.width - (me.margin.right + me.margin.left)]);
 
         // Add axis
-        me.xAxis = d3.axisBottom(me.xScale);
+        me.xAxis = d3.axisBottom(me.xScale).tickFormat(d => d/100 + "s");
         me.yAxis = d3.axisLeft(me.yScale);
 
         // Add x-axis as a g element
