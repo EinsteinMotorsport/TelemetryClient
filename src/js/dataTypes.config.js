@@ -1,16 +1,16 @@
 const dataTypes = {
-    "speed": {
-        "translation": "Geschwindigkeit",
+    "tmot": {
+        "translation": "tmot",
         "id": "0",
         "color": "#D81B60"
     },
-    "acceleration": {
-        "translation": "Beschleunigung",
+    "tmot2": {
+        "translation": "tmot2",
         "id": "1",
         "color": "#43A047"
     },
-    "oilPressure": {
-        "translation": "Öl Druck",
+    "p_brake_r": {
+        "translation": "p_brake_r",
         "id": "2",
         "color": "#1A237E"
     },

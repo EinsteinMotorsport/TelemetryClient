@@ -11,6 +11,9 @@ let chartConfiguration = {
     init: function () {
         // Register the eventhandler
         this.registerEvents();
+
+        // Load the data-types into the form
+        this.loadDataTypes();
     },
 
 
@@ -281,5 +284,31 @@ let chartConfiguration = {
 
         // Update buffer
         app.chartDataHandler.chartBuffers[me.chartId].changeInterval(timerInterval);
+    },
+
+
+    /**
+     * Load the data-types from dataTypes.config.js into the form
+     * For each data-type there is generated an entry in the select-element
+     * '.chart-configuration-data-type'
+     */
+    loadDataTypes() {
+        let me = this;
+
+        // Select the select element
+        let dataTypeConfigSelect = document.getElementById('chart-configuration-data-type');
+
+        // Iterate through the Object of data-types
+        Object.keys(dataTypes).forEach((dataTypeId) => {
+
+            // Create the entry for the select list
+            let optionElement = document.createElement("option");
+            optionElement.setAttribute('value', dataTypeId);
+            optionElement.appendChild(document.createTextNode(dataTypes[dataTypeId]['translation']));
+
+            // Append the element to the list
+            dataTypeConfigSelect.appendChild(optionElement);
+
+        });
     }
 };
