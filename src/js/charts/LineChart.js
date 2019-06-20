@@ -24,6 +24,12 @@ function LineChart(element) {
     // Contains the d3js line-generators
     this.lines = [];
 
+    // The time period shown on the x-axis in s
+    this.period = 6;
+
+    // The sampling time of the buffer in ms
+    this.samplingTime = 10;
+
     // Axis container
     this.xAxis = null;
     this.yAxis = null;
@@ -74,9 +80,6 @@ function LineChart(element) {
     this.setup = function () {
         let me = this;
 
-        // Displayed seconds
-        me.n = 600;
-
         // Create the svg
         me.svg = d3.select(me.element).append('svg:svg')
             .attr('width', me.width)
@@ -100,11 +103,11 @@ function LineChart(element) {
 
         // Define x-scale
         me.xScale = d3.scaleLinear()
-            .domain([-(me.n - 1), 0])
+            .domain([-(me.getAmountOfValues() - 1), 0])
             .range([me.margin.left, me.width - (me.margin.right + me.margin.left)]);
 
         // Add axis
-        me.xAxis = d3.axisBottom(me.xScale).tickFormat(d => d/100 + "s");
+        me.xAxis = d3.axisBottom(me.xScale).tickFormat(d => d / 1000 * this.getSamplingTime() + "s");
         me.yAxis = d3.axisLeft(me.yScale);
 
         // Add x-axis as a g element
@@ -134,11 +137,8 @@ function LineChart(element) {
         // Push a new data point onto the back
         me.data[dataType].push(value);
 
-        // Redraw the line
-        me.svg.select(".line-" + dataType).attr("d", me.lines[dataType]).attr("transform", null);
-
         // If data set reaches the limit defined by "n"
-        if (me.data[dataType].length >= me.n) {
+        if (me.data[dataType].length >= me.getAmountOfValues()) {
             // The value which will be dropped
             let droppedValue = me.data[dataType][0];
 
@@ -153,6 +153,9 @@ function LineChart(element) {
                 me.rescaleAxis()
             }
         }
+
+        // Redraw the line
+        me.svg.select(".line-" + dataType).attr("d", me.lines[dataType]).attr("transform", null);
 
         // Update scale if new value is bigger than the last max value of the chart
         if (value > me.maxDisplayedValue) {
@@ -173,12 +176,12 @@ function LineChart(element) {
         let me = this;
 
         // Init empty data-array matching the line
-        me.data[dataType] = new Array(me.n-1).fill(0);
+        me.data[dataType] = new Array(me.getAmountOfValues() - 1).fill(0);
 
         // Add line to array
         me.lines[dataType] = d3.line()
             .x(function (d, i) {
-                return me.xScale(i-me.n+1);
+                return me.xScale(i - me.getAmountOfValues() + 1);
             })
             .y(function (d) {
                 return me.yScale(d);
@@ -219,7 +222,6 @@ function LineChart(element) {
         // Redraw legend
         me.printLegend();
     };
-
 
 
     /**
@@ -298,6 +300,77 @@ function LineChart(element) {
                 .style("font-size", "15px").attr("alignment-baseline", "middle");
             offset += 20;
         });
+    };
+
+
+    /**
+     * Returns the sampling time of the chart buffer
+     * @return {number}
+     */
+    this.getSamplingTime = function () {
+        return this.samplingTime;
+    };
+
+
+    /**
+     * Sets the sampling time of the chart buffer
+     * @param samplingTime
+     */
+    this.setSamplingTime = function (samplingTime) {
+        this.samplingTime = samplingTime;
+    };
+
+
+    /**
+     * Returns the amount of values shown by one line with the given
+     * period and sampling time
+     */
+    this.getAmountOfValues = function () {
+        return this.period / this.getSamplingTime() * 1000
+    };
+
+
+    /**
+     * Update period of the chart -> change scale of x-axis
+     * @param newPeriod
+     */
+    this.changePeriod = function (newPeriod) {
+        let me = this;
+
+        // Set period property
+        me.period = newPeriod;
+
+        // Adjust data arrays
+        Object.keys(me.data).forEach((dataType) => {
+
+            if (me.getAmountOfValues() < me.data[dataType].length) {
+                me.data[dataType].length = me.getAmountOfValues();
+            }
+
+            // Add line to array
+            me.lines[dataType].x(function (d, i) {
+                return me.xScale(i - me.getAmountOfValues() + 1);
+            });
+        });
+
+        // Redefine x-scale
+        me.xScale = d3.scaleLinear()
+            .domain([-(me.getAmountOfValues() - 1), 0])
+            .range([me.margin.left, me.width - (me.margin.right + me.margin.left)]);
+
+        // Add axis
+        me.xAxis = d3.axisBottom(me.xScale).tickFormat(d => d / 1000 * this.getSamplingTime() + "s");
+
+        // Update axis
+        me.xAxisGroup.call(me.xAxis);
+    };
+
+
+    /**
+     * This chart got a time period
+     */
+    this.hasPeriod = function () {
+        return true;
     };
 
 

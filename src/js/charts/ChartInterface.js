@@ -10,4 +10,7 @@ const ChartInterface = {
     addDataType: required,
     removeDataType: required,
     push: required,
+    getSamplingTime: required,
+    setSamplingTime: required,
+    hasPeriod: required,
 };

@@ -53,14 +53,14 @@ let app = {
             // Get the chart type from the data-attribute and decide which chart object is needed
             switch (value.getAttribute("data-chart-type")) {
                 case "number-chart":
-                    app.chartDataHandler.chartBuffers[key].chart = new NumberChart(value.querySelector('.media > svg'));
+                    app.chartDataHandler.chartBuffers[key].setChart(new NumberChart(value.querySelector('.media > svg')));
                     break;
                 case "gauge-chart":
-                    app.chartDataHandler.chartBuffers[key].chart = new GaugeChart(value.querySelector('.media > svg'));
+                    app.chartDataHandler.chartBuffers[key].setChart(new GaugeChart(value.querySelector('.media > svg')));
                     break;
                 case "line-chart":
                 default:
-                    app.chartDataHandler.chartBuffers[key].chart = new LineChart(value.querySelector('.media > svg'));
+                    app.chartDataHandler.chartBuffers[key].setChart(new LineChart(value.querySelector('.media > svg')));
             }
         });
     },

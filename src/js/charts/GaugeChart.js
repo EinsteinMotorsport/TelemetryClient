@@ -17,6 +17,9 @@ function GaugeChart(element) {
     // Chart svg
     this.svg = null;
 
+    // The sampling time of the buffer in ms
+    this.samplingTime = 10;
+
     // Chart configuration
     this.config = {
         size: 250,
@@ -199,6 +202,31 @@ function GaugeChart(element) {
         return deg * Math.PI / 180;
     };
 
+
+    /**
+     * Returns the sampling time of the chart buffer
+     * @return {number}
+     */
+    this.getSamplingTime = function () {
+        return this.samplingTime;
+    };
+
+
+    /**
+     * Sets the sampling time of the chart buffer
+     * @param samplingTime
+     */
+    this.setSamplingTime = function (samplingTime) {
+        this.samplingTime = samplingTime;
+    };
+
+
+    /**
+     * This chart got no time period
+     */
+    this.hasPeriod = function () {
+        return false;
+    };
 
     // Init the chart
     this.init();

@@ -12,7 +12,7 @@ from random import randint  # Random generator
 
 # Config
 port = 7777  # Websocket Port
-timeInterval = 50  # Milliseconds
+timeInterval = 10  # Milliseconds
 
 
 class WSHandler(tornado.websocket.WebSocketHandler):

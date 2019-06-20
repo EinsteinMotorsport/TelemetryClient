@@ -119,13 +119,23 @@
                 </div>
 
 
-                <!-- Interval time -->
-                <div class="form-group">
+                <!-- Sampling time -->
+                <div class="form-group" style="display:none;">
                     <div class="input">
-                        <input type="number" class="has-content" id="chart-configuration-interval">
+                        <input type="number" class="has-content" id="chart-configuration-sampling-time">
                         <span class="highlight"></span>
                         <span class="bar"></span>
-                        <label>Zeitraum in Sekunden</label>
+                        <label>Abtastrate in ms</label>
+                    </div>
+                </div>
+
+                <!-- Period time -->
+                <div class="form-group">
+                    <div class="input">
+                        <input type="number" class="has-content" id="chart-configuration-period">
+                        <span class="highlight"></span>
+                        <span class="bar"></span>
+                        <label>Zeitraum in s</label>
                     </div>
                 </div>
 

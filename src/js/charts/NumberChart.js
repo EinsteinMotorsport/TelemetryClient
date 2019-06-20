@@ -12,6 +12,9 @@ function NumberChart(element) {
     // Mapping the data-types to the chart
     this.chartMap = [];
 
+    // The sampling time of the buffer in ms
+    this.samplingTime = 10;
+
     // Chart svg
     this.svg = null;
 
@@ -107,6 +110,32 @@ function NumberChart(element) {
      * @param lineId
      */
     this.removeDataType = function (lineId) {
+    };
+
+
+    /**
+     * Returns the sampling time of the chart buffer
+     * @return {number}
+     */
+    this.getSamplingTime = function () {
+        return this.samplingTime;
+    };
+
+
+    /**
+     * Sets the sampling time of the chart buffer
+     * @param samplingTime
+     */
+    this.setSamplingTime = function (samplingTime) {
+        this.samplingTime = samplingTime;
+    };
+
+
+    /**
+     * This chart got no time period
+     */
+    this.hasPeriod = function () {
+        return false;
     };
 
 

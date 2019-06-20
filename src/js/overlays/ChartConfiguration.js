@@ -54,9 +54,14 @@ let chartConfiguration = {
             }
         });
 
-        // On change timer interval of chart buffer
-        document.getElementById("chart-configuration-interval").on('change', function (e) {
-            me.onChangeChartBufferInterval(e);
+        // On change period of chart
+        document.getElementById("chart-configuration-period").on('change', function (e) {
+            me.onChangeChartPeriod(e);
+        });
+
+        // On change sampling time of chart buffer
+        document.getElementById("chart-configuration-sampling-time").on('change', function (e) {
+            me.onChangeChartBufferSamplingTime(e);
         });
     },
 
@@ -183,16 +188,16 @@ let chartConfiguration = {
         switch (chartTypeSelect.value) {
             case "gauge-chart":
                 // Set Chart to gauge-chart
-                app.chartDataHandler.chartBuffers[me.chartId].chart = new GaugeChart(me.changingCard.querySelector('.media > svg'));
+                app.chartDataHandler.chartBuffers[me.chartId].setChart(new GaugeChart(me.changingCard.querySelector('.media > svg')));
                 break;
             case "number-chart":
                 // Set Chart to number-chart
-                app.chartDataHandler.chartBuffers[me.chartId].chart = new NumberChart(me.changingCard.querySelector('.media > svg'));
+                app.chartDataHandler.chartBuffers[me.chartId].setChart(new NumberChart(me.changingCard.querySelector('.media > svg')));
                 break;
             case "line-chart":
             default:
                 // Set Chart to line-chart
-                app.chartDataHandler.chartBuffers[me.chartId].chart = new LineChart(me.changingCard.querySelector('.media > svg'));
+                app.chartDataHandler.chartBuffers[me.chartId].setChart(new LineChart(me.changingCard.querySelector('.media > svg')));
                 chartTypeSelect.value = "line-chart";
         }
 
@@ -264,26 +269,48 @@ let chartConfiguration = {
             // Preselect the chart type
             this.selectChartType(this.chartType);
 
-            // Load interval time to form
-            document.getElementById("chart-configuration-interval").value =
-                app.chartDataHandler.chartBuffers[this.chartId].intervalTime;
+            // Load sampling time to form
+            document.getElementById("chart-configuration-sampling-time").value =
+                app.chartDataHandler.chartBuffers[this.chartId].chart.getSamplingTime();
+
+            // Load period time to form
+            document.getElementById("chart-configuration-period").value =
+                app.chartDataHandler.chartBuffers[this.chartId].chart.period;
         }
     },
 
 
     /**
-     * On change the chart buffer interval time:
-     * update interval of buffer to refresh chart values in different interval
+     * On change the chart period:
+     * Update chart to show the values in different time period
      * @param e
      */
-    onChangeChartBufferInterval: function (e) {
+    onChangeChartPeriod: function (e) {
         let me = this;
 
-        // New interval time in ms
-        let timerInterval = e.target.value;
+        // Skip if chart type don't supports time period
+        if (!app.chartDataHandler.chartBuffers[me.chartId].chart.hasPeriod()) {
+            return;
+        }
+
+        // Set the new time period to the chart
+        app.chartDataHandler.chartBuffers[me.chartId].chart.changePeriod(e.target.value);
+    },
+
+
+    /**
+     * On change the chart buffer sampling time:
+     * Update interval of buffer to refresh chart values in different interval
+     * @param e
+     */
+    onChangeChartBufferSamplingTime: function (e) {
+        let me = this;
+
+        // New sampling time in ms
+        let samplingTime = e.target.value;
 
         // Update buffer
-        app.chartDataHandler.chartBuffers[me.chartId].changeInterval(timerInterval);
+        app.chartDataHandler.chartBuffers[me.chartId].changeInterval(samplingTime);
     },
 
 
@@ -293,8 +320,6 @@ let chartConfiguration = {
      * '.chart-configuration-data-type'
      */
     loadDataTypes() {
-        let me = this;
-
         // Select the select element
         let dataTypeConfigSelect = document.getElementById('chart-configuration-data-type');
 
