@@ -1,15 +1,19 @@
 {
   "name": "telemetry-client",
   "version": "1.0.0",
-  "description": "",
+  "description": "Live telemetry to log sensor values from die AL-race-cars",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "package-windows": "electron-packager . live-telemetry --overwrite --asar=true --platform=win32 --arch=ia32 --icon=img/favicon.ico --prune=true --out=release-builds --version-string.CompanyName=\"Stefan Rink\" --version-string.FileDescription=\"Einstein Motorsport\" --version-string.ProductName=\"Live Telemetry\"",
+    "create-installer-win": "node installers/windows/createinstaller.js"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "electron": "^5.0.8",
+    "electron-packager": "^14.0.3",
+    "electron-winstaller": "^4.0.0",
     "grunt": "^1.0.4",
     "grunt-contrib-less": "^2.0.0",
     "grunt-contrib-uglify-es": "^3.3.0",
