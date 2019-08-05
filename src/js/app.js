@@ -45,27 +45,25 @@ let app = {
     /**
      * Event-listener for elements starting a WebSocket connection
      */
-    onClickStartSocket: function (e) {
-        let me = this;
-
+    onClickStartSocket: function () {
         // New connection to local running WebSocket Server
-        me.websocket = new WebSocket("ws://127.0.0.1:7777/service");
+        app.websocket = new WebSocket("ws://127.0.0.1:7777/service");
         //me.websocket = new WebSocket("ws://141.59.140.154:7777/service");
 
         // When connection is established
-        me.websocket.onopen = function () {
+        app.websocket.onopen = function () {
             // Send test-data to the Server
-            me.websocket.send("Hello server");
+            app.websocket.send("Hello server");
         };
 
         // Event for handling data sent from the server
-        me.websocket.onmessage = function (evt) {
+        app.websocket.onmessage = function (evt) {
             // Parse Data and give it to the charts
             app.chartDataHandler.push(evt.data);
         };
 
         // Event fired when WebSocket connection is closed
-        me.websocket.onclose = function () {
+        app.websocket.onclose = function () {
             // websocket is closed.
         };
     },
@@ -74,9 +72,17 @@ let app = {
      * Event-listener for elements stopping a WebSocket connection
      */
     onClickStopSocket: function () {
-        if (this.websocket != null) {
-            this.websocket.close();
+        if (app.websocket != null) {
+            app.websocket.close();
         }
+    },
+
+
+    /**
+     * Returns true if there is an active connection via websocket
+     */
+    isWebsocketOpen: function () {
+        return app.websocket && app.websocket.readyState === 1;
     },
 
 

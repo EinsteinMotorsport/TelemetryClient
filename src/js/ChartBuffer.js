@@ -41,6 +41,10 @@ function ChartBuffer() {
     this.movinga = function () {
         let me = this;
 
+        // Exit if telemetry is not started or there is no connection
+        if (!app.isWebsocketOpen()) return;
+
+        // Push buffer value to the chart
         Object.keys(me.values).forEach((key) => {
             let val = me.values[key];
             this.chart.push(key, val);
