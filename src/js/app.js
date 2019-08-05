@@ -6,7 +6,9 @@ let app = {
     // Handles the data-flow to the chart
     chartDataHandler: new DataHandler(),
 
-    // Initialize Application
+    /**
+     * Initialize Application
+     */
     init: function () {
         // register its elements
         this.registerEvents();
@@ -14,14 +16,16 @@ let app = {
         // Starts draggable
         draggable.init();
 
-        // Initialize the chart loaded by default
-        this.initCharts();
-
         // Init ChartConfiguration overlay
         chartConfiguration.init();
+
+        // Apply preset TODO: different presets for each discipline
+        this.applyPreset();
     },
 
-    // Registers all events depending on this class
+    /**
+     * Registers all events depending on this class
+     */
     registerEvents: function () {
         let me = this;
 
@@ -39,34 +43,8 @@ let app = {
 
 
     /**
-     * Initialize the chart loaded by default
-     *
-     * Sets the chart object for each card.
+     * Event-listener for elements starting a WebSocket connection
      */
-    initCharts: function () {
-        // Select each chart element and loop through all of them
-        document.querySelectorAll("[data-chart-id]").forEach((value, key) => {
-
-            // Add new buffer as container for a chart of type ChartInterface
-            app.chartDataHandler.chartBuffers[key] = new ChartBuffer();
-
-            // Get the chart type from the data-attribute and decide which chart object is needed
-            switch (value.getAttribute("data-chart-type")) {
-                case "number-chart":
-                    app.chartDataHandler.chartBuffers[key].setChart(new NumberChart(value.querySelector('.media > svg')));
-                    break;
-                case "gauge-chart":
-                    app.chartDataHandler.chartBuffers[key].setChart(new GaugeChart(value.querySelector('.media > svg')));
-                    break;
-                case "line-chart":
-                default:
-                    app.chartDataHandler.chartBuffers[key].setChart(new LineChart(value.querySelector('.media > svg')));
-            }
-        });
-    },
-
-
-    // Event-listener for elements starting a WebSocket connection
     onClickStartSocket: function (e) {
         let me = this;
 
@@ -92,7 +70,9 @@ let app = {
         };
     },
 
-    // Event-listener for elements stopping a WebSocket connection
+    /**
+     * Event-listener for elements stopping a WebSocket connection
+     */
     onClickStopSocket: function () {
         if (this.websocket != null) {
             this.websocket.close();
@@ -111,6 +91,65 @@ let app = {
         } else {
             e.target.classList.add("has-content");
         }
+    },
+
+
+    /**
+     * Apply a hardcoded preset
+     * Set charts with values by default on launching the app
+     * At the moment the amount of charts must match the amount of cards in the index.html.
+     * Later this should be flexible and cards will be added in a loop through the preset.
+     */
+    applyPreset() {
+        let preset = {
+            "0": {
+                "type": "line-chart",
+                "values": ["tmot", "tmot2"]
+            },
+            "1": {
+                "type": "line-chart",
+                "values": ["p_brake_f", "p_brake_r"]
+            },
+            "2": {
+                "type": "line-chart",
+                "values": ["pfuel", "poil"]
+            },
+            "3": {
+                "type": "number-chart",
+                "values": []
+            },
+            "4": {
+                "type": "gauge-chart",
+                "values": []
+            }
+        };
+
+
+        // Select each chart element and loop through all of them
+        document.querySelectorAll("[data-chart-id]").forEach((value, key) => {
+
+            // Add new buffer as container for a chart of type ChartInterface
+            app.chartDataHandler.chartBuffers[key] = new ChartBuffer();
+
+            // Get the chart type from the data-attribute and decide which chart object is needed
+            switch (preset[key].type) {
+                case "number-chart":
+                    app.chartDataHandler.chartBuffers[key].setChart(new NumberChart(value.querySelector('.media > svg')));
+                    break;
+                case "gauge-chart":
+                    app.chartDataHandler.chartBuffers[key].setChart(new GaugeChart(value.querySelector('.media > svg')));
+                    break;
+                case "line-chart":
+                default:
+                    app.chartDataHandler.chartBuffers[key].setChart(new LineChart(value.querySelector('.media > svg')));
+            }
+
+            // Add the watched data-types to the chart
+            preset[key].values.forEach((dataType) => {
+                // Add the data-type
+                app.chartDataHandler.chartBuffers[key].chart.addDataType(dataType);
+            });
+        });
     }
 };
 
@@ -120,7 +159,9 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
-// Event handler for an Array of classes
+/**
+ * Event handler for an Array of classes
+ */
 Object.prototype.on = function (event, callback) {
     let me = this;
 
@@ -177,7 +218,9 @@ Array.prototype.shuffle = function () {
  * @returns {string}
  */
 String.prototype.kebabToCamelCase = function () {
-    return this.replace(/-([a-z])/g, function (g) { return g[1].toUpperCase(); }).capitalize();
+    return this.replace(/-([a-z])/g, function (g) {
+        return g[1].toUpperCase();
+    }).capitalize();
 };
 
 
