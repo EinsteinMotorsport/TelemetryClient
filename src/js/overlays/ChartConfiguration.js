@@ -81,9 +81,6 @@ let chartConfiguration = {
         // Changing chart
         let chart = app.chartDataHandler.chartBuffers[me.chartId].chart;
 
-        // Append a new data type to chartmap
-        chart.chartMap.push(dataTypeSelect.value);
-
         // Selected element from the data-type dropdown
         let selectedElement = dataTypeSelect.options[dataTypeSelect.selectedIndex];
 
@@ -109,10 +106,9 @@ let chartConfiguration = {
         let chart = app.chartDataHandler.chartBuffers[me.chartId].chart;
 
         // Delete the element from the datahandler
+        // TODO: Look for a cleaner solution
         for (let i = 0; i < chart.chartMap.length; i++) {
             if (chart.chartMap[i] === dataTypeId) {
-                chart.chartMap.splice(i, 1);
-
                 // Remove data-type from chart
                 chart.removeDataType(i);
             }

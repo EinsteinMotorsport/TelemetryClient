@@ -178,6 +178,9 @@ function LineChart(element) {
         // Init empty data-array matching the line
         me.data[dataType] = new Array(me.getAmountOfValues() - 1).fill(0);
 
+        // Append a new data type to chartmap
+        me.chartMap.push(dataType);
+
         // Add line to array
         me.lines[dataType] = d3.line()
             .x(function (d, i) {
@@ -206,18 +209,19 @@ function LineChart(element) {
     /**
      * Removes a line from the line chart
      *
-     * @param key
+     * @param dataType
      */
-    this.removeDataType = function (key) {
+    this.removeDataType = function (dataType) {
         let me = this;
 
-        console.log("key", key);
-
         // Remove line from array
-        me.lines.splice(key, 1);
+        me.lines.splice(dataType, 1);
+
+        // Remove data-type from chartmap
+        me.chartMap.splice(dataType, 1);
 
         // Remove the line from the drawn chart
-        me.svg.selectAll('.line').filter((d, i) => i === key).remove();
+        me.svg.selectAll('.line').filter((d, i) => i === dataType).remove();
 
         // Redraw legend
         me.printLegend();

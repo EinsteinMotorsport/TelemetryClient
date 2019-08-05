@@ -100,16 +100,20 @@ function NumberChart(element) {
 
 
     /**
-     * @param lineId
+     * @param dataType
      */
-    this.addDataType = function (lineId) {
+    this.addDataType = function (dataType) {
+        // Append a new data type to chartmap
+        this.chartMap.push(dataType);
+
     };
 
 
     /**
-     * @param lineId
+     * @param dataType
      */
-    this.removeDataType = function (lineId) {
+    this.removeDataType = function (dataType) {
+        this.chartMap.splice(dataType, 1);
     };
 
 
