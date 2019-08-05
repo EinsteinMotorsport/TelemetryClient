@@ -34,7 +34,7 @@ const dataTypes = {
         "id": "8",
         "color": "#5C6BC0"
     },
-    "pbrake_f": {
+    "p_brake_f": {
         "translation": "p_brake_f",
         "id": "9",
         "color": "#26C6DA"
