@@ -99,23 +99,22 @@ let chartConfiguration = {
      */
     onClickChartValueRemove: function (e) {
         let me = this;
-        // Data-type Id of the clicked element
-        let dataTypeId = e.target.dataset.id;
+        // Data-type of the clicked element
+        let dataType = e.target.dataset.id;
 
         // Changing chart
-        let chart = app.chartDataHandler.chartBuffers[me.chartId].chart;
+        let chartBuffer = app.chartDataHandler.chartBuffers[me.chartId];
 
-        // Delete the element from the datahandler
-        // TODO: Look for a cleaner solution
-        for (let i = 0; i < chart.chartMap.length; i++) {
-            if (chart.chartMap[i] === dataTypeId) {
-                // Remove data-type from chart
-                chart.removeDataType(i);
-            }
-        }
+        console.log("Chart buffer values", chartBuffer.values);
+
+        // Delete value from chart buffer
+        delete chartBuffer.values[dataType];
+
+        // Delete the element from the chart
+        chartBuffer.chart.removeDataType(dataType);
 
         // Remove the list-element from the DOM
-        this.removeDataTypeFromList(dataTypeId);
+        this.removeDataTypeFromList(dataType);
     },
 
 

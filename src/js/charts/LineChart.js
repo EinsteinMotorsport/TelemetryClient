@@ -215,13 +215,19 @@ function LineChart(element) {
         let me = this;
 
         // Remove line from array
-        me.lines.splice(dataType, 1);
+        delete me.lines[dataType];
 
         // Remove data-type from chartmap
-        me.chartMap.splice(dataType, 1);
+        me.chartMap.splice(me.chartMap.indexOf(dataType), 1);
+
+        // Remove values from data-array
+        delete me.data[dataType];
 
         // Remove the line from the drawn chart
-        me.svg.selectAll('.line').filter((d, i) => i === dataType).remove();
+        me.svg.select('.line-' + dataType).remove();
+
+        // Force rescaling the charts axis on next tick
+        me.maxDisplayedValue = me.getMaxValueFromData();
 
         // Redraw legend
         me.printLegend();

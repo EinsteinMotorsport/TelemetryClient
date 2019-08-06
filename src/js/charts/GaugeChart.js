@@ -192,7 +192,7 @@ function GaugeChart(element) {
      * @param dataType
      */
     this.removeDataType = function (dataType) {
-        this.chartMap.splice(dataType, 1);
+        this.chartMap.splice(this.chartMap.indexOf(dataType), 1);
     };
 
 
