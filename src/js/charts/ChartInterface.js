@@ -6,6 +6,7 @@ let required = function () {throw new Error('Interface not implemented')};
  * @interface
  */
 const ChartInterface = {
+    getName: required,
     init: required,
     addDataType: required,
     removeDataType: required,

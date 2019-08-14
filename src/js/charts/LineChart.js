@@ -50,6 +50,14 @@ function LineChart(element) {
     };
 
     /**
+     * Returns the chart name in kebab-case
+     * @return {string}
+     */
+    this.getName = function () {
+        return 'line-chart';
+    };
+
+    /**
      * Initializes the chart
      */
     this.init = function () {

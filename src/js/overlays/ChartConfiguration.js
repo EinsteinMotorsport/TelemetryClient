@@ -4,6 +4,7 @@ let chartConfiguration = {
 
     changingCard: null,
 
+    chartType: null,
 
     /**
      * Init the object
@@ -131,7 +132,6 @@ let chartConfiguration = {
 
         // Get the id and type of the chart
         me.chartId = me.changingCard.dataset.chartId;
-        me.chartType = me.changingCard.dataset.chartType;
 
         // Load the configuration out of the chart map in the data handler
         this.load();
@@ -262,7 +262,7 @@ let chartConfiguration = {
             }
 
             // Preselect the chart type
-            this.selectChartType(this.chartType);
+            this.selectChartType(app.chartDataHandler.chartBuffers[this.chartId].chart.getName());
 
             // Load sampling time to form
             document.getElementById("chart-configuration-sampling-time").value =

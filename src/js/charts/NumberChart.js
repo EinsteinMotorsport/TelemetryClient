@@ -21,6 +21,13 @@ function NumberChart(element) {
     // Container element which displays the value
     this.valueContainer = null;
 
+    /**
+     * Returns the chart name in kebab-case
+     * @return {string}
+     */
+    this.getName = function () {
+        return 'number-chart';
+    };
 
     /**
      * Initializes the chart

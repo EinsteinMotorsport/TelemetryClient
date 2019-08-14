@@ -50,6 +50,14 @@ function GaugeChart(element) {
     this.range = undefined;
 
     /**
+     * Returns the chart name in kebab-case
+     * @return {string}
+     */
+    this.getName = function () {
+        return 'gauge-chart';
+    };
+
+    /**
      * Initializes the chart
      */
     this.init = function () {
