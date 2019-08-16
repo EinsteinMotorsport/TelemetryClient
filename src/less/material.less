@@ -49,11 +49,11 @@ html, body {
 }
 
 .ripple:hover {
-  background: @secondaryColor radial-gradient(circle, transparent 1%, @secondaryColor 1%) center/15000%;
+  background: rgba(124, 124, 124, 0.15) radial-gradient(circle, transparent 1%, rgba(124, 124, 124, 0.15) 1%) center/15000%;
 }
 
 .ripple:active {
-  background-color: @primaryColor;
+  background-color: rgba(66, 66, 66, 0.25);
   background-size: 100%;
   transition: background 0s;
 }
@@ -123,6 +123,16 @@ a, button {
         padding: 12px 12px;
       }
     }
+  }
+
+  &.error {
+    background-color: #F44336;
+  }
+
+  .footer-notifier {
+    padding: 16px;
+    position: absolute;
+    right: 0;
   }
 }
 

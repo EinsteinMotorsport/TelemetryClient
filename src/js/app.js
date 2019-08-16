@@ -46,6 +46,9 @@ let app = {
      * Event-listener for elements starting a WebSocket connection
      */
     onClickStartSocket: function () {
+        // Tracks the time between two values arriving
+        const refreshRateTracker = new RefreshRateTracker();
+
         // New connection to local running WebSocket Server
         app.websocket = new WebSocket("ws://127.0.0.1:7777/service");
         //me.websocket = new WebSocket("ws://141.59.140.154:7777/service");
@@ -58,6 +61,9 @@ let app = {
 
         // Event for handling data sent from the server
         app.websocket.onmessage = function (evt) {
+            // Notify refresh time tracker
+            refreshRateTracker.notify();
+
             // Parse Data and give it to the charts
             app.chartDataHandler.push(evt.data);
         };
