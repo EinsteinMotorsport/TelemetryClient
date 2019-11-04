@@ -1,4 +1,4 @@
-# LiveClient
+# TelemetryClient
 
 ## Installation
 Make sure you've got Node.js installed: 
