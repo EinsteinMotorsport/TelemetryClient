@@ -1,5 +1,4 @@
 import json
-
 import tornado.httpserver
 import tornado.websocket
 import tornado.ioloop
@@ -7,13 +6,11 @@ from tornado.ioloop import PeriodicCallback
 import tornado.web
 from random import randint  # Random generator
 
-# import Data
-
-
 # Config
 port = 7777  # Websocket Port
-timeInterval = 10  # Milliseconds
+interval = 10  # Milliseconds
 
+data = [0, 0, 0, 0]
 
 class WSHandler(tornado.websocket.WebSocketHandler):
 
@@ -24,44 +21,28 @@ class WSHandler(tornado.websocket.WebSocketHandler):
 
     def open(self):
         # Send message periodic via socket upon a time interval
-        self.callback = PeriodicCallback(self.send_values, timeInterval)
-        self.callback.start()
+        self.periodicCallback = PeriodicCallback(self.send_values, interval)
+        self.periodicCallback.start()
 
     def send_values(self):
         # Generates random values to send via websocket
-        info = [0, randint(0, 70)]
-        to_send_info = json.dumps(info)
 
-        print(to_send_info)
-        self.write_message(to_send_info)
-        # Generates random values to send via websocket
-        info = [1, randint(0, 70)]
-        to_send_info = json.dumps(info)
-
-        print(to_send_info)
-        self.write_message(to_send_info)
-        # Generates random values to send via websocket
-        info = [2, randint(0, 70)]
-        to_send_info = json.dumps(info)
-
-        print(to_send_info)
-        self.write_message(to_send_info)
-        # Generates random values to send via websocket
-        info = [3, randint(0, 70)]
-        to_send_info = json.dumps(info)
-
-        print(to_send_info)
-        self.write_message(to_send_info)
+        for i in range(len(data)):
+            data[i] = data[i] + randint(-3, 3)
+            data[i] = max(min(70, data[i]), 0)
+            json_response = json.dumps([i, data[i]])
+            print(json_response)
+            self.write_message(json_response)
 
     def on_message(self, message):
         pass
 
     def on_close(self):
-        self.callback.stop()
+        self.periodicCallback.stop()
 
-    def InputData(self, InputListe):
+    def InputData(self, inputList):
         SinputList = []
-        for line in InputListe:
+        for line in inputList:
             # he call .decode('ascii') converts the raw bytes to a string.
             # .split(',') splits the string on commas.
             s = line.decode("utf-8").split(',')
