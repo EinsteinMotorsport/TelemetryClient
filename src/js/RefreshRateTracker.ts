@@ -1,14 +1,16 @@
-function RefreshRateTracker() {
+import FooterNotifier from "./FooterNotifier";
 
-    this.footerNotifier = new FooterNotifier();
+export default class RefreshRateTracker {
 
-    this.notRespondingInterval = null;
+    footerNotifier = new FooterNotifier();
+
+    notRespondingInterval: NodeJS.Timeout = null;
 
     /**
      * Tells the tracker a new value is received, so the tracker can estimate if
      * the car is not responding after a while
      */
-    this.notify = function () {
+    notify(): void {
         const me = this;
 
         me.footerNotifier.reset();
@@ -21,5 +23,4 @@ function RefreshRateTracker() {
             me.footerNotifier.error('Car is not responding');
         }, 1000);
     }
-
 }

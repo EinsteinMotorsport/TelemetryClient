@@ -5,44 +5,58 @@
  * @param element
  * @constructor
  */
-function LineChart(element) {
+
+import * as d3 from "d3";
+import {dataTypes} from "../dataTypes.config";
+import ChartInterface from "./ChartInterface";
+
+export default class LineChart implements ChartInterface {
+
+    constructor(element: Element) {
+        this.element = element.parentElement;
+        this.init();
+    }
+
+
     // Svg Element in the document
-    this.element = element.parentNode;
+    element: Element;
 
     // Contains the name of each data-type added to the chart
-    this.chartMap = [];
+    chartMap: string[] = [];
 
     // Chart svg
-    this.svg = null;
+    svg = null;
+    canvas = null;
+    legend = null;
 
     // Data displayed ordered by lineId
-    this.data = [];
+    data: number[][] = [];
 
     // Value which describes the upper bounding of the y-axis
-    this.maxDisplayedValue = 0;
+    maxDisplayedValue = 0;
 
     // Contains the d3js line-generators
-    this.lines = [];
+    lines: [] = [];
 
     // The time period shown on the x-axis in s
-    this.period = 6;
+    period = 6;
 
     // The sampling time of the buffer in ms
-    this.samplingTime = 10;
+    samplingTime = 10;
 
     // Axis container
-    this.xAxis = null;
-    this.yAxis = null;
-    this.xScale = null;
-    this.yScale = null;
-    this.xAxisGroup = null;
-    this.yAxisGroup = null;
+    xAxis: d3.Axis<any> = null;
+    yAxis: d3.Axis<any> = null;
+    xScale = null;
+    yScale = null;
+    xAxisGroup = null;
+    yAxisGroup = null;
 
-    this.width = 700;
-    this.height = 230;
+    width = 700;
+    height = 230;
 
     // Chart props
-    this.margin = {
+    margin = {
         top: 8,
         right: 200,
         bottom: 24,
@@ -53,14 +67,14 @@ function LineChart(element) {
      * Returns the chart name in kebab-case
      * @return {string}
      */
-    this.getName = function () {
+    getName() {
         return 'line-chart';
     };
 
     /**
      * Initializes the chart
      */
-    this.init = function () {
+    init() {
         this.registerEvents();
 
         // Clear chart element
@@ -73,11 +87,11 @@ function LineChart(element) {
     /**
      * Register the object events
      */
-    this.registerEvents = function () {
+    registerEvents() {
         let me = this;
 
-        window.on("resize", function (e) {
-            me.onResizeWindow();
+        window.addEventListener("resize", function (e: any) {
+            me.onResizeWindow(e);
         });
     };
 
@@ -85,7 +99,7 @@ function LineChart(element) {
     /**
      * Setup the chart with its basic components
      */
-    this.setup = function () {
+    setup() {
         let me = this;
 
         // Create the svg
@@ -115,7 +129,7 @@ function LineChart(element) {
             .range([me.margin.left, me.width - (me.margin.right + me.margin.left)]);
 
         // Add axis
-        me.xAxis = d3.axisBottom(me.xScale).tickFormat(d => d / 1000 * this.getSamplingTime() + "s");
+        me.xAxis = d3.axisBottom(me.xScale).tickFormat((d: number) => d / 1000 * this.getSamplingTime() + "s");
         me.yAxis = d3.axisLeft(me.yScale);
 
         // Add x-axis as a g element
@@ -139,8 +153,12 @@ function LineChart(element) {
      * @param dataType the data-type-id
      * @param value
      */
-    this.push = function (dataType, value) {
+    push(dataType: string, value: number) {
         let me = this;
+
+        console.log("line chart data", me.data);
+
+        console.log("data type", dataType);
 
         // Push a new data point onto the back
         me.data[dataType].push(value);
@@ -180,7 +198,7 @@ function LineChart(element) {
      *
      * @param dataType number Should match data-type id
      */
-    this.addDataType = function (dataType) {
+    addDataType(dataType: string) {
         let me = this;
 
         // Init empty data-array matching the line
@@ -191,10 +209,10 @@ function LineChart(element) {
 
         // Add line to array
         me.lines[dataType] = d3.line()
-            .x(function (d, i) {
+            .x((d, i) => {
                 return me.xScale(i - me.getAmountOfValues() + 1);
             })
-            .y(function (d) {
+            .y(function (d: any) {
                 return me.yScale(d);
             });
 
@@ -219,7 +237,7 @@ function LineChart(element) {
      *
      * @param dataType
      */
-    this.removeDataType = function (dataType) {
+    removeDataType(dataType: string) {
         let me = this;
 
         // Remove line from array
@@ -247,7 +265,7 @@ function LineChart(element) {
      *
      * @returns the max value currently displayed in the chart
      */
-    this.getMaxValueFromData = function () {
+    getMaxValueFromData() {
         let maxValue = 0;
         let me = this;
 
@@ -265,7 +283,7 @@ function LineChart(element) {
     /**
      * Rescales the axis using the maxDisplayValue for max y-axis value
      */
-    this.rescaleAxis = function () {
+    rescaleAxis() {
         let me = this;
 
         // Update the y-scale
@@ -282,9 +300,7 @@ function LineChart(element) {
      *
      * @param e
      */
-    this.onResizeWindow = function (e) {
-        let me = this;
-
+    onResizeWindow(e) {
         // TODO: Make magic happen
 
 
@@ -303,7 +319,7 @@ function LineChart(element) {
      *
      * helpful guide: https://www.d3-graph-gallery.com/graph/custom_legend.html
      */
-    this.printLegend = function () {
+    printLegend() {
         let me = this;
         let offset = 0;
 
@@ -325,7 +341,7 @@ function LineChart(element) {
      * Returns the sampling time of the chart buffer
      * @return {number}
      */
-    this.getSamplingTime = function () {
+    getSamplingTime() {
         return this.samplingTime;
     };
 
@@ -334,7 +350,7 @@ function LineChart(element) {
      * Sets the sampling time of the chart buffer
      * @param samplingTime
      */
-    this.setSamplingTime = function (samplingTime) {
+    setSamplingTime(samplingTime: number) {
         this.samplingTime = samplingTime;
     };
 
@@ -343,7 +359,7 @@ function LineChart(element) {
      * Returns the amount of values shown by one line with the given
      * period and sampling time
      */
-    this.getAmountOfValues = function () {
+    getAmountOfValues() {
         return this.period / this.getSamplingTime() * 1000
     };
 
@@ -352,7 +368,7 @@ function LineChart(element) {
      * Update period of the chart -> change scale of x-axis
      * @param newPeriod
      */
-    this.changePeriod = function (newPeriod) {
+    changePeriod(newPeriod: number) {
         let me = this;
 
         // Set period property
@@ -377,7 +393,7 @@ function LineChart(element) {
             .range([me.margin.left, me.width - (me.margin.right + me.margin.left)]);
 
         // Add axis
-        me.xAxis = d3.axisBottom(me.xScale).tickFormat(d => d / 1000 * this.getSamplingTime() + "s");
+        me.xAxis = d3.axisBottom(me.xScale).tickFormat((d: number) => d / 1000 * this.getSamplingTime() + "s");
 
         // Update axis
         me.xAxisGroup.call(me.xAxis);
@@ -387,14 +403,7 @@ function LineChart(element) {
     /**
      * This chart got a time period
      */
-    this.hasPeriod = function () {
+    hasPeriod() {
         return true;
     };
-
-
-    // Init the chart
-    this.init();
 }
-
-// Implement the chart interface
-LineChart.prototype = Object.create(ChartInterface);

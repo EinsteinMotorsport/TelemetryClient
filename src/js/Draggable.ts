@@ -1,21 +1,21 @@
 // Draggable object for dragging the cards around
-draggable = {
+export default class Draggable {
 
     // class which should made draggable
-    draggableClass: 'card',
+    public static DRAGGABLE_CLASS: string = 'card';
 
     // Inits Draggable functionality
-    init: function () {
+    init() {
         // Register all events of this object
         this.registerEvents();
-    },
+    };
 
     // Register all events
-    registerEvents: function () {
+    registerEvents() {
         let me = this;
 
         // Register the Drag and Drop events on the elements and give them ids to identify them
-        let elements = document.getElementsByClassName(me.draggableClass);
+        let elements = document.getElementsByClassName(Draggable.DRAGGABLE_CLASS);
         let c = 1;
         Array.prototype.forEach.call(elements, function (e) {
             e.draggable = true;
@@ -29,45 +29,45 @@ draggable = {
                 c++;
             }
         })
-    },
+    };
 
     // Drag starts
-    dragstart: function (e) {
+    dragstart(e) {
         // Add active dragging class
         e.target.classList.add('dragging');
 
         // Add ID to DataTransfer
         e.dataTransfer.setData("text/plain", e.target.id);
         e.dataTransfer.dropEffect = "move";
-    },
+    };
 
     // Preventing anything on dragging an element over another
-    dragover: function (e) {
+    dragover(e) {
         e.stopPropagation();
         e.preventDefault();
-    },
+    };
 
-    dragenter: function (e) {
+    dragenter(e) {
         e.preventDefault();
 
         // Add class while dragging over
-        e.target.closest("." + draggable.draggableClass).classList.add('dragover');
-    },
+        e.target.closest("." + Draggable.DRAGGABLE_CLASS).classList.add('dragover');
+    };
 
-    dragleave: function (e) {
+    dragleave(e) {
         e.preventDefault();
 
         // Remove dragover class when leaving element
-        e.target.closest("." + draggable.draggableClass).classList.remove('dragover');
-    },
+        e.target.closest("." + Draggable.DRAGGABLE_CLASS).classList.remove('dragover');
+    };
 
     // Element drops
-    drop: function (e) {
+    drop(e) {
         e.preventDefault();
 
         // define the two elements dragged and dropped over
         let draggedElement = document.querySelector("#" + e.dataTransfer.getData("text/plain"));
-        let droppedOverElement = e.target.closest("." + draggable.draggableClass);
+        let droppedOverElement = e.target.closest("." + Draggable.DRAGGABLE_CLASS);
 
         // Remove active dragging class
         draggedElement.classList.remove('dragging');
@@ -82,4 +82,4 @@ draggable = {
             draggedElement.parentNode.insertBefore(draggedElement, droppedOverElement.nextSibling);
         }
     }
-};
+}

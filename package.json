@@ -4,6 +4,9 @@
   "description": "Live telemetry to log sensor values from die AL-race-cars",
   "main": "main.js",
   "scripts": {
+    "build": "webpack --mode development",
+    "production": "webpack --mode production",
+    "watch": "webpack --watch",
     "start": "electron .",
     "package-windows": "electron-packager . live-telemetry --overwrite --asar=true --platform=win32 --arch=ia32 --icon=img/favicon.ico --prune=true --out=release-builds --version-string.CompanyName=\"Stefan Rink\" --version-string.FileDescription=\"Einstein Motorsport\" --version-string.ProductName=\"Live Telemetry\"",
     "create-installer-win": "node installers/windows/createinstaller.js"
@@ -11,12 +14,25 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@babel/core": "^7.7.2",
+    "@babel/preset-env": "^7.7.1",
+    "@types/d3": "^5.7.2",
+    "awesome-typescript-loader": "^5.2.1",
+    "babel-loader": "^8.0.6",
+    "css-loader": "^3.2.0",
     "electron": "^5.0.8",
     "electron-packager": "^14.0.3",
     "electron-winstaller": "^4.0.0",
-    "grunt": "^1.0.4",
-    "grunt-contrib-less": "^2.0.0",
-    "grunt-contrib-uglify-es": "^3.3.0",
-    "grunt-contrib-watch": "^1.1.0"
+    "file-loader": "^4.2.0",
+    "less": "^3.10.3",
+    "less-loader": "^5.0.0",
+    "mini-css-extract-plugin": "^0.8.0",
+    "style-loader": "^1.0.0",
+    "typescript": "^3.6.2",
+    "webpack": "^4.39.3",
+    "webpack-cli": "^3.3.7"
+  },
+  "dependencies": {
+    "d3": "^5.11.0"
   }
 }

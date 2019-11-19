@@ -3,18 +3,18 @@
  *
  * @constructor
  */
-function FooterNotifier() {
+export default class FooterNotifier {
 
     // Footer element
-    this.navbarElement = document.getElementsByClassName('navbar-bottom')[0];
+    navbarElement = document.getElementsByClassName('navbar-bottom')[0];
 
     // Element which should contain the message
-    this.footerNotifierElement = document.getElementsByClassName('footer-notifier')[0];
+    footerNotifierElement = document.getElementsByClassName('footer-notifier')[0];
 
     /**
      * Reset the footer bars style and remove the notification messages
      */
-    this.reset = function () {
+    reset() {
         // Remove message from footer
         this.footerNotifierElement.innerHTML = '';
         // Remove specific notification styles
@@ -26,11 +26,10 @@ function FooterNotifier() {
      *
      * @param message
      */
-    this.error = function (message) {
+    error(message: string) {
         // Display error message
         this.footerNotifierElement.innerHTML = message;
         // Add the specific error styles (footer=red)
         this.navbarElement.classList.add('error');
     };
-
 }

@@ -7,21 +7,30 @@
  * @param element
  * @constructor
  */
-function GaugeChart(element) {
+import * as d3 from "d3";
+import ChartInterface from "./ChartInterface";
+
+export default class GaugeChart implements ChartInterface {
+
+    constructor(element: Element) {
+        this.element = element;
+        this.init();
+    }
+
     // Svg Element in the document
-    this.element = element;
+    element: Element;
 
     // Mapping the data-types to the chart
-    this.chartMap = [];
+    chartMap: [] = [];
 
     // Chart svg
-    this.svg = null;
+    svg: any = null;
 
     // The sampling time of the buffer in ms
-    this.samplingTime = 10;
+    samplingTime = 10;
 
     // Chart configuration
-    this.config = {
+    config = {
         size: 250,
         ringInset: 20,
         ringWidth: 20,
@@ -45,22 +54,22 @@ function GaugeChart(element) {
         arcColorFn: d3.interpolateHsl(d3.rgb('#FFEE58'), d3.rgb('#e53935'))
     };
 
-    this.pointer = undefined;
-    this.scale = undefined;
-    this.range = undefined;
+    pointer: any = undefined;
+    scale = undefined;
+    range: number = undefined;
 
     /**
      * Returns the chart name in kebab-case
      * @return {string}
      */
-    this.getName = function () {
+    getName() {
         return 'gauge-chart';
     };
 
     /**
      * Initializes the chart
      */
-    this.init = function () {
+    init() {
         this.registerEvents();
 
         // Clear chart element
@@ -73,7 +82,7 @@ function GaugeChart(element) {
     /**
      * Register the object events
      */
-    this.registerEvents = function () {
+    registerEvents() {
 
     };
 
@@ -81,10 +90,10 @@ function GaugeChart(element) {
     /**
      * Setup the chart with its basic components
      */
-    this.setup = function () {
+    setup() {
         let me = this;
 
-        let r = undefined;
+        let r: number = undefined;
         let pointerHeadLength;
 
         let arc;
@@ -108,11 +117,11 @@ function GaugeChart(element) {
         arc = d3.arc()
             .innerRadius(r - me.config.ringWidth - me.config.ringInset)
             .outerRadius(r - me.config.ringInset)
-            .startAngle((d, i) => {
+            .startAngle((d: any, i) => {
                 let ratio = d * i;
                 return me.deg2rad(me.config.minAngle + (ratio * me.range));
             })
-            .endAngle((d, i) => {
+            .endAngle((d: any, i) => {
                 let ratio = d * (i + 1);
                 return me.deg2rad(me.config.minAngle + (ratio * me.range));
             });
@@ -133,7 +142,7 @@ function GaugeChart(element) {
         arcs.selectAll('path')
             .data(tickData)
             .enter().append('path')
-            .attr('fill', function (d, i) {
+            .attr('fill', function (d: number, i: number) {
                 return me.config.arcColorFn(d * i);
             })
             .attr('d', arc);
@@ -144,9 +153,9 @@ function GaugeChart(element) {
         lg.selectAll('text')
             .data(ticks)
             .enter().append('text')
-            .attr('transform', (d) => {
-                let ratio = me.scale(d);
-                let newAngle = me.config.minAngle + (ratio * me.range);
+            .attr('transform', (d: number) => {
+                const ratio = me.scale(d);
+                const newAngle = me.config.minAngle + (ratio * me.range);
                 return 'rotate(' + newAngle + ') translate(0,' + (me.config.labelInset - r) + ')';
             })
             .text(me.config.labelFormat);
@@ -166,31 +175,30 @@ function GaugeChart(element) {
             .attr('transform', 'rotate(' + me.config.minAngle + ')');
 
         // Initial value "0"
-        me.push(0, 0);
+        me.push("id", 0);
     };
 
 
     /**
      * Changes the current value
      *
-     * @param lineId the data-type-id
+     * @param dataType the data-type-id
      * @param value
      */
-    this.push = function (lineId, value) {
-        let me = this;
-        let ratio = me.scale(value);
-        let angle = me.config.minAngle + (ratio * me.range);
-        me.pointer.transition()
+    push(dataType: string, value: number) {
+        const ratio = this.scale(value);
+        const angle = this.config.minAngle + (ratio * this.range);
+        this.pointer.transition()
             .attr('transform', 'rotate(' + angle + ')');
-
     };
 
 
     /**
      * @param dataType data-type name
      */
-    this.addDataType = function (dataType) {
+    addDataType(dataType: string) {
         // Append a new data type to chartmap
+        // @ts-ignore
         this.chartMap.push(dataType);
 
     };
@@ -199,7 +207,8 @@ function GaugeChart(element) {
     /**
      * @param dataType
      */
-    this.removeDataType = function (dataType) {
+    removeDataType(dataType: string) {
+        // @ts-ignore
         this.chartMap.splice(this.chartMap.indexOf(dataType), 1);
     };
 
@@ -210,7 +219,7 @@ function GaugeChart(element) {
      * @param deg
      * @returns {number}
      */
-    this.deg2rad = function (deg) {
+    deg2rad(deg: number) {
         return deg * Math.PI / 180;
     };
 
@@ -219,7 +228,7 @@ function GaugeChart(element) {
      * Returns the sampling time of the chart buffer
      * @return {number}
      */
-    this.getSamplingTime = function () {
+    getSamplingTime() {
         return this.samplingTime;
     };
 
@@ -228,7 +237,7 @@ function GaugeChart(element) {
      * Sets the sampling time of the chart buffer
      * @param samplingTime
      */
-    this.setSamplingTime = function (samplingTime) {
+    setSamplingTime(samplingTime: number) {
         this.samplingTime = samplingTime;
     };
 
@@ -236,13 +245,7 @@ function GaugeChart(element) {
     /**
      * This chart got no time period
      */
-    this.hasPeriod = function () {
+    hasPeriod() {
         return false;
     };
-
-    // Init the chart
-    this.init();
 }
-
-// Implement the chart interface
-GaugeChart.prototype = Object.create(ChartInterface);

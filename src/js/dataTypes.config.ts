@@ -1,4 +1,4 @@
-const dataTypes = {
+export const dataTypes = {
     "tmot": {
         "translation": "tmot",
         "id": "2",

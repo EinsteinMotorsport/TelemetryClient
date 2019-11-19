@@ -1,70 +1,78 @@
-let chartConfiguration = {
+import GaugeChart from "../charts/GaugeChart";
+import NumberChart from "../charts/NumberChart";
+import {dataTypes} from "../dataTypes.config";
+import LineChart from "../charts/LineChart";
+import App from "../App";
 
-    chartId: null,
+export default class ChartConfiguration {
 
-    changingCard: null,
+    chartId: number = null;
 
-    chartType: null,
+    changingCard: any = null;
+
+    chartType: string = null;
+
+    constructor() {}
 
     /**
      * Init the object
      */
-    init: function () {
+    init() {
         // Register the eventhandler
         this.registerEvents();
 
         // Load the data-types into the form
         this.loadDataTypes();
-    },
+    };
 
 
     /**
      * Register the objects events
      */
-    registerEvents: function () {
+    registerEvents() {
         let me = this;
 
         // On click open overlay
-        document.querySelectorAll("[data-overlay-open='chart-configuration']").on('click', function (e) {
+        document.querySelectorAll("[data-overlay-open='chart-configuration']").on('click', function (e: any) {
             me.onClickOpenOverlay(e)
         });
 
         // On click close overlay
-        document.querySelectorAll("[data-overlay-close='chart-configuration']").on('click', function (e) {
+        document.querySelectorAll("[data-overlay-close='chart-configuration']").on('click', function (e: any) {
             me.onClickCloseOverlay(e)
         });
         // On click close overlay
-        document.getElementsByClassName("overlay--container").on('click', function (e) {
+        document.getElementsByClassName("overlay--container").on('click', function (e: any) {
             me.onClickOverlayContainer(e)
         });
 
         // On click the save button
-        document.getElementById("chart-configuration-chart-type").on('change', function (e) {
+        document.getElementById("chart-configuration-chart-type").on('change', function (e: any) {
             me.onChangeChartType(e);
         });
 
         // On click add chart value to chart
-        document.getElementById("chart-value-add").on('click', function (e) {
+        document.getElementById("chart-value-add").on('click', function (e: any) {
             me.onClickChartValueAdd(e);
         });
 
         // On click remove chart value from chart
-        document.getElementsByClassName("list--data-types").on('click', function (e) {
+        document.getElementsByClassName("list--data-types").on('click', function (e: any) {
             if (e.target.classList.contains('data-type--delete')) {
                 me.onClickChartValueRemove(e);
             }
         });
 
         // On change period of chart
-        document.getElementById("chart-configuration-period").on('change', function (e) {
+        document.getElementById("chart-configuration-period").on('change', function (e: any) {
             me.onChangeChartPeriod(e);
         });
 
         // On change sampling time of chart buffer
-        document.getElementById("chart-configuration-sampling-time").on('change', function (e) {
+        document.getElementById("chart-configuration-sampling-time").on('change', function (e: any) {
             me.onChangeChartBufferSamplingTime(e);
         });
-    },
+    };
 
 
     /**
@@ -72,15 +80,16 @@ let chartConfiguration = {
      *
      * @param e event
      */
-    onClickChartValueAdd: function (e) {
+    onClickChartValueAdd(e: any) {
         e.preventDefault();
         let me = this;
 
         // Select dropdown for data-types
-        let dataTypeSelect = document.getElementById("chart-configuration-data-type");
+        // @ts-ignore
+        let dataTypeSelect: HTMLSelectElement = document.getElementById("chart-configuration-data-type");
 
         // Changing chart
-        let chart = app.chartDataHandler.chartBuffers[me.chartId].chart;
+        let chart = App.chartDataHandler.chartBuffers[me.chartId].chart;
 
         // Selected element from the data-type dropdown
         let selectedElement = dataTypeSelect.options[dataTypeSelect.selectedIndex];
@@ -90,7 +99,7 @@ let chartConfiguration = {
 
         // Add the data-type to the chart
         chart.addDataType(selectedElement.value);
-    },
+    };
 
 
     /**
@@ -98,13 +107,13 @@ let chartConfiguration = {
      *
      * @param e event
      */
-    onClickChartValueRemove: function (e) {
+    onClickChartValueRemove(e: any) {
         let me = this;
         // Data-type of the clicked element
         let dataType = e.target.dataset.id;
 
         // Changing chart
-        let chartBuffer = app.chartDataHandler.chartBuffers[me.chartId];
+        let chartBuffer = App.chartDataHandler.chartBuffers[me.chartId];
 
         console.log("Chart buffer values", chartBuffer.values);
 
@@ -116,7 +125,7 @@ let chartConfiguration = {
 
         // Remove the list-element from the DOM
         this.removeDataTypeFromList(dataType);
-    },
+    };
 
 
     /**
@@ -124,7 +133,7 @@ let chartConfiguration = {
      *
      * @param e event
      */
-    onClickOpenOverlay: function (e) {
+    onClickOpenOverlay(e: any) {
         let me = this;
 
         // Save the card which is currently edited to the object
@@ -138,7 +147,7 @@ let chartConfiguration = {
 
         // Show the overlay
         document.querySelector("[data-overlay='configure']").classList.add("overlay--visible");
-    },
+    };
 
 
     /**
@@ -146,13 +155,13 @@ let chartConfiguration = {
      *
      * @param e event
      */
-    onClickCloseOverlay: function (e) {
+    onClickCloseOverlay(e: any) {
         // Hide the overlay
         document.querySelector("[data-overlay='configure']").classList.remove("overlay--visible");
 
         // clear the node list of data types
         this.clearList();
-    },
+    };
 
 
     /**
@@ -160,11 +169,11 @@ let chartConfiguration = {
      *
      * @param e event
      */
-    onClickOverlayContainer: function (e) {
+    onClickOverlayContainer(e: any) {
         // check if clicked element is outside the overlay -> close on click in the darkened area
         if (e["srcElement"].classList.contains("overlay--container"))
             this.onClickCloseOverlay(e);
-    },
+    };
 
 
     /**
@@ -172,33 +181,34 @@ let chartConfiguration = {
      *
      * @param e event
      */
-    onChangeChartType: function (e) {
+    onChangeChartType(e: any) {
         e.preventDefault();
         let me = this;
 
         // Chart-types select
-        let chartTypeSelect = document.getElementById("chart-configuration-chart-type");
+        // @ts-ignore
+        let chartTypeSelect: HTMLSelectElement = document.getElementById("chart-configuration-chart-type");
 
         // Set chart-type
         switch (chartTypeSelect.value) {
             case "gauge-chart":
                 // Set Chart to gauge-chart
-                app.chartDataHandler.chartBuffers[me.chartId].setChart(new GaugeChart(me.changingCard.querySelector('.media > svg')));
+                App.chartDataHandler.chartBuffers[me.chartId].setChart(new GaugeChart(me.changingCard.querySelector('.media > svg')));
                 break;
             case "number-chart":
                 // Set Chart to number-chart
-                app.chartDataHandler.chartBuffers[me.chartId].setChart(new NumberChart(me.changingCard.querySelector('.media > svg')));
+                App.chartDataHandler.chartBuffers[me.chartId].setChart(new NumberChart(me.changingCard.querySelector('.media > svg')));
                 break;
             case "line-chart":
             default:
                 // Set Chart to line-chart
-                app.chartDataHandler.chartBuffers[me.chartId].setChart(new LineChart(me.changingCard.querySelector('.media > svg')));
+                App.chartDataHandler.chartBuffers[me.chartId].setChart(new LineChart(me.changingCard.querySelector('.media > svg')));
                 chartTypeSelect.value = "line-chart";
         }
 
         // Set chart-type to card
         me.changingCard.dataset.chartType = chartTypeSelect.value;
-    },
+    };
 
 
     /**
@@ -207,10 +217,10 @@ let chartConfiguration = {
      * @param id int
      * @param label string
      */
-    addDataTypeToList: function (id, label) {
+    addDataTypeToList(id: string, label: string) {
         document.getElementsByClassName('list--data-types')[0].innerHTML +=
             `<li>${label}<i data-id="${id}" class="material-icons data-type--delete">close</i></li>`;
-    },
+    };
 
 
     /**
@@ -218,61 +228,66 @@ let chartConfiguration = {
      *
      * @param id int
      */
-    removeDataTypeFromList: function (id) {
+    removeDataTypeFromList(id: number) {
+        // @ts-ignore
         document.querySelector(`[data-id="${id}"]`).parentNode.remove();
-    },
+    };
 
 
     /**
      * Removes all elements in the list in the overlay (clearing on close)
      */
-    clearList: function () {
+    clearList() {
         document.querySelector('.list--data-types').innerHTML = '';
-    },
+    };
 
 
     /**
      * Select the chart type in the dropdown
      */
-    selectChartType: function (chartType) {
-        let options = document.getElementById("chart-configuration-chart-type").options;
+    selectChartType(chartType: string) {
+        // @ts-ignore
+        let options: HTMLOptionElement[] = document.getElementById("chart-configuration-chart-type").options;
         Array.prototype.forEach.call(options, (element) => {
             if (element.value === chartType) {
                 element.selected = true;
             }
         });
-    },
+    };
 
 
     /**
      * Load chart configuration out of the data-handler
      */
-    load: function () {
+    load() {
         // If chart config exists
-        if (app.chartDataHandler.chartBuffers[this.chartId]) {
+        if (App.chartDataHandler.chartBuffers[this.chartId]) {
 
             // ChartMap contains all data types displayed in the chart
-            let chartMap = app.chartDataHandler.chartBuffers[this.chartId].chart.chartMap || [];
+            let chartMap = App.chartDataHandler.chartBuffers[this.chartId].chart.chartMap || [];
 
             // If data types are set, loop through them and display them in the list of added data types
             if (chartMap.length !== 0) {
                 for (let i = 0; i < chartMap.length; i++) {
+                    // @ts-ignore
                     this.addDataTypeToList(chartMap[i], dataTypes[chartMap[i]].translation);
                 }
             }
 
             // Preselect the chart type
-            this.selectChartType(app.chartDataHandler.chartBuffers[this.chartId].chart.getName());
+            this.selectChartType(App.chartDataHandler.chartBuffers[this.chartId].chart.getName());
 
             // Load sampling time to form
+            // @ts-ignore
             document.getElementById("chart-configuration-sampling-time").value =
-                app.chartDataHandler.chartBuffers[this.chartId].chart.getSamplingTime();
+                App.chartDataHandler.chartBuffers[this.chartId].chart.getSamplingTime();
 
             // Load period time to form
+            // @ts-ignore
             document.getElementById("chart-configuration-period").value =
-                app.chartDataHandler.chartBuffers[this.chartId].chart.period;
+                App.chartDataHandler.chartBuffers[this.chartId].chart.period;
         }
-    },
+    };
 
 
     /**
@@ -280,17 +295,17 @@ let chartConfiguration = {
      * Update chart to show the values in different time period
      * @param e
      */
-    onChangeChartPeriod: function (e) {
+    onChangeChartPeriod(e: any) {
         let me = this;
 
         // Skip if chart type don't supports time period
-        if (!app.chartDataHandler.chartBuffers[me.chartId].chart.hasPeriod()) {
+        if (!App.chartDataHandler.chartBuffers[me.chartId].chart.hasPeriod()) {
             return;
         }
 
         // Set the new time period to the chart
-        app.chartDataHandler.chartBuffers[me.chartId].chart.changePeriod(e.target.value);
-    },
+        App.chartDataHandler.chartBuffers[me.chartId].chart.changePeriod(e.target.value);
+    };
 
 
     /**
@@ -298,15 +313,15 @@ let chartConfiguration = {
      * Update interval of buffer to refresh chart values in different interval
      * @param e
      */
-    onChangeChartBufferSamplingTime: function (e) {
+    onChangeChartBufferSamplingTime(e: any) {
         let me = this;
 
         // New sampling time in ms
         let samplingTime = e.target.value;
 
         // Update buffer
-        app.chartDataHandler.chartBuffers[me.chartId].changeInterval(samplingTime);
-    },
+        App.chartDataHandler.chartBuffers[me.chartId].changeInterval(samplingTime);
+    };
 
 
     /**
@@ -324,6 +339,7 @@ let chartConfiguration = {
             // Create the entry for the select list
             let optionElement = document.createElement("option");
             optionElement.setAttribute('value', dataTypeId);
+            // @ts-ignore
             optionElement.appendChild(document.createTextNode(dataTypes[dataTypeId]['translation']));
 
             // Append the element to the list
@@ -331,4 +347,4 @@ let chartConfiguration = {
 
         });
     }
-};
+}

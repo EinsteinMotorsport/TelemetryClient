@@ -5,34 +5,50 @@
  * @param element
  * @constructor
  */
-function NumberChart(element) {
+import ChartInterface from "./ChartInterface";
+import * as d3 from "d3";
+
+export default class NumberChart implements ChartInterface {
+
+    constructor(element: Element) {
+        this.element = element;
+        this.init();
+    }
+
+
     // Svg Element in the document
-    this.element = element;
+    element: Element;
 
     // Mapping the data-types to the chart
-    this.chartMap = [];
+    chartMap: string[] = [];
 
     // The sampling time of the buffer in ms
-    this.samplingTime = 10;
+    samplingTime: number = 10;
 
     // Chart svg
-    this.svg = null;
+    svg = null;
 
     // Container element which displays the value
-    this.valueContainer = null;
+    valueContainer = null;
+
+    // Amount auf display values
+    n: number = null;
+
+    // D3 svg draw g
+    g = null;
 
     /**
      * Returns the chart name in kebab-case
      * @return {string}
      */
-    this.getName = function () {
+    getName(): string {
         return 'number-chart';
     };
 
     /**
      * Initializes the chart
      */
-    this.init = function () {
+    init(): void {
         this.registerEvents();
 
         // Clear chart element
@@ -45,7 +61,7 @@ function NumberChart(element) {
     /**
      * Register the object events
      */
-    this.registerEvents = function () {
+    registerEvents(): void {
 
     };
 
@@ -53,7 +69,7 @@ function NumberChart(element) {
     /**
      * Setup the chart with its basic components
      */
-    this.setup = function () {
+    setup(): void {
         let me = this;
 
         // Amount of displayed values
@@ -95,10 +111,10 @@ function NumberChart(element) {
     /**
      * Adds a value to the chart
      *
-     * @param lineId the data-type-id
+     * @param dataType the data-type-id
      * @param value
      */
-    this.push = function (lineId, value) {
+    push(dataType: string, value: number) {
         let me = this;
 
         // Update the shown value
@@ -109,7 +125,7 @@ function NumberChart(element) {
     /**
      * @param dataType
      */
-    this.addDataType = function (dataType) {
+    addDataType(dataType: string) {
         // Append a new data type to chartmap
         this.chartMap.push(dataType);
 
@@ -119,7 +135,7 @@ function NumberChart(element) {
     /**
      * @param dataType
      */
-    this.removeDataType = function (dataType) {
+    removeDataType(dataType) {
         this.chartMap.splice(this.chartMap.indexOf(dataType), 1);
     };
 
@@ -128,7 +144,7 @@ function NumberChart(element) {
      * Returns the sampling time of the chart buffer
      * @return {number}
      */
-    this.getSamplingTime = function () {
+    getSamplingTime() {
         return this.samplingTime;
     };
 
@@ -137,7 +153,7 @@ function NumberChart(element) {
      * Sets the sampling time of the chart buffer
      * @param samplingTime
      */
-    this.setSamplingTime = function (samplingTime) {
+    setSamplingTime(samplingTime) {
         this.samplingTime = samplingTime;
     };
 
@@ -145,14 +161,7 @@ function NumberChart(element) {
     /**
      * This chart got no time period
      */
-    this.hasPeriod = function () {
+    hasPeriod() {
         return false;
     };
-
-
-    // Init the chart
-    this.init();
 }
-
-// Implement the chart interface
-NumberChart.prototype = Object.create(ChartInterface);

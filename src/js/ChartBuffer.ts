@@ -7,16 +7,19 @@
  *
  * @constructor
  */
-function ChartBuffer() {
+import ChartInterface from "./charts/ChartInterface";
+import App from "./App";
 
-    this.interval = null;
+export default class ChartBuffer {
 
-    this.values = [];
+    interval: NodeJS.Timeout = null;
+
+    values = [];
 
     /**
      * @type ChartInterface
      */
-    this.chart = null;
+    chart: ChartInterface = null;
 
 
     /**
@@ -24,7 +27,7 @@ function ChartBuffer() {
      *
      * @param chart ChartInterface
      */
-    this.setChart = function (chart) {
+    setChart(chart) {
         let me = this;
 
         // Set the chart object
@@ -38,14 +41,14 @@ function ChartBuffer() {
     /**
      * Move current values of the buffer to the chart
      */
-    this.movinga = function () {
+    movinga() {
         let me = this;
 
         // Exit if telemetry is not started or there is no connection
-        if (!app.isWebsocketOpen()) return;
+        if (!App.getInstance().isWebsocketOpen()) return;
 
         // Push buffer value to the chart
-        Object.keys(me.values).forEach((key) => {
+        Object.keys(me.values).forEach((key: string) => {
             let val = me.values[key];
             this.chart.push(key, val);
         });
@@ -58,7 +61,7 @@ function ChartBuffer() {
      * @param dataType
      * @param value
      */
-    this.push = function (dataType, value) {
+    push(dataType, value) {
         let me = this;
 
         // Push a new data point onto the back
@@ -72,11 +75,11 @@ function ChartBuffer() {
      * @param samplingTime
      * @return {boolean}
      */
-    this.changeInterval = function (samplingTime) {
+    changeInterval(samplingTime) {
         let me = this;
 
         // Validate number
-        if (!Number.isNumeric(samplingTime)) {
+        if (!Number.prototype.isNumeric(samplingTime)) {
             return false;
         }
         samplingTime = parseInt(samplingTime);
@@ -88,7 +91,7 @@ function ChartBuffer() {
         clearInterval(me.interval);
 
         // Set new one
-        me.interval = setInterval(function () {
+        me.interval = setInterval(() => {
             me.movinga();
         }, samplingTime);
     };
